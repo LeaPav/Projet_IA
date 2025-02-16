@@ -6,30 +6,31 @@ void Enemy::setPath(std::vector<sf::Vector2i> newPath)
 {
 	if (!newPath.empty()) {
 		path = newPath;
-		currentIndexPath;
+		currentIndexPath = 0;
 	}
 }
 
 
 void Enemy::patrol(sf::RectangleShape& forme, Grid& grid) {
     static int currentWaypoint = 0;
-    static sf::Vector2f waypoints[4] = { sf::Vector2f(100,300), sf::Vector2f( 500,100), sf::Vector2f(100,  300), sf::Vector2f( 500, 300) };
-    sf::Vector2f target = waypoints[currentWaypoint / CELL_SIZE];
+    needsRepath == false;
+    static Vector2f waypoints[4] = { Vector2f(100,300), Vector2f(500,100), Vector2f(100,  300), Vector2f(500, 300) };
+    Vector2f target = waypoints[currentWaypoint];
     position = forme.getPosition();
-    sf::Vector2f direction = target - position;
-    float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+    Vector2f direction = target - position;
+    float distance = sqrt(direction.x * direction.x + direction.y * direction.y);
 
-   if(needsRepath == false){
-       if (distance < 5.0f) {
-           currentWaypoint = (currentWaypoint + 1) % 4;
-       }
-       else {
-           direction /= distance;
-           position += direction * 0.9f;
-       }
-   }
-    sf::Vector2f newPositionE = position;
-    sf::FloatRect newBoundsE(newPositionE, forme.getSize());
+    if (needsRepath == false) {
+        if (distance < 5.0f) {
+            currentWaypoint = (currentWaypoint + 1) % 4;
+        }
+        else {
+            direction /= distance;
+            position += direction * 0.9f;
+        }
+    }
+    Vector2f newPositionE = position;
+    FloatRect newBoundsE(newPositionE, forme.getSize());
 
     auto isWalkable = [&](float x, float y) {
         int gridX = static_cast<int>(x / CELL_SIZE);
@@ -43,28 +44,32 @@ void Enemy::patrol(sf::RectangleShape& forme, Grid& grid) {
         isWalkable(newBoundsE.left + newBoundsE.width - 1, newBoundsE.top + newBoundsE.height - 1)) {
         forme.setPosition(position);
     }
+    else {
+        needsRepath = true;
+    }
+    if (needsRepath) {
+        auto newPath = Pathfinding::findPath(grid,
+            Vector2i(static_cast<int>(newPositionE.x / CELL_SIZE), static_cast<int>(newPositionE.y / CELL_SIZE)),
+            Vector2i(static_cast<int>(target.x / CELL_SIZE), static_cast<int>(target.y / CELL_SIZE)));
 
-  
-    //else{
-    //    needsRepath = true;
-    //}
-    //if (needsRepath /*|| path.empty()*/) {
-    //    path = Pathfinding::findPath(grid,
-    //        sf::Vector2i(static_cast<int>(newPositionE.x), static_cast<int>(newPositionE.y)),
-    //        sf::Vector2i(static_cast<int>(target.x), static_cast<int>(target.y)));
-    //    pathIndex = 0;
-    //    needsRepath = false;
-    //}
-    //if (!path.empty() && pathIndex < path.size()) {
-    //    sf::Vector2i test = path[pathIndex];
-    //    position = sf::Vector2f(test.x * CELL_SIZE, test.y * CELL_SIZE);
-    //    if (pathIndex < path.size() - 1)
-    //        pathIndex++;
-    //}
+        if (!newPath.empty()) {
+            path = newPath;
+            pathIndex = 0;
+            needsRepath = false;
+        }
+    }
+
+    if (pathIndex < path.size()) {
+        Vector2i nextStep = path[pathIndex];
+        position = Vector2f(nextStep.x * CELL_SIZE, nextStep.y * CELL_SIZE);
+        shape.setPosition(position);
+        if (pathIndex < path.size() - 1)
+            pathIndex++;
+    }
+    
 }
-
-void Enemy::chase(sf::Vector2f playerPos, RectangleShape& form) {
-    sf::Vector2f direction = playerPos - position;
+void Enemy::chase(Vector2f playerPos, RectangleShape& form) {
+    Vector2f direction = playerPos - position;
     float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
 
     if (distance > 0) {

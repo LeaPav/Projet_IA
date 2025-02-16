@@ -3,6 +3,7 @@
 #include "Enemy.hpp"
 #include "Grid.hpp"
 #include <vector>
+#include "Objet.hpp"
 
 
 const int WINDOW_WIDTH = 835;
@@ -12,11 +13,15 @@ int main() {
     window.setFramerateLimit(60);
   
     Player player(200, 400);
-    std::vector<Enemy> enemies = {Enemy(700, 100) };
-    Enemy Enel(100, 100);
     Grid grid;
     grid.loadFromFile("map.txt");
-    enemies.push_back(Enel);
+    std::vector<std::unique_ptr<Enemy>> enemies;
+
+    auto enemy1 = std::make_unique<Enemy>(100, 100);
+    auto enemy2 = std::make_unique<Enemy>(700, 100);
+    Objet objet(150,150);
+    enemies.push_back(std::move(enemy1));
+    enemies.push_back(std::move(enemy2));
     sf::Clock clock;
     while (window.isOpen()) {
         sf::Time dt = clock.restart();
@@ -28,26 +33,22 @@ int main() {
                 window.close();
         }
         player.update(deltaTime, grid, player.shape);
-       
-        /*if (Enel.detectP(player.shape.getPosition(), Enel.shape)) {
-            Enel.shape.setFillColor(sf::Color::Magenta);
-        }
-        else {
-            Enel.shape.setFillColor(sf::Color::Green);
-        }*/
+        objet.update(deltaTime, grid, objet.shape);
+        objet.coliP(player, objet.shape, window);
         window.clear();
         grid.draw(window);
         for (auto& enemy : enemies) {
-            enemy.update(deltaTime, grid, enemy.shape);
-            if (enemy.detectP(player.shape.getPosition(), enemy.shape)) {
-                enemy.shape.setFillColor(sf::Color::Magenta);
+            enemy->update(deltaTime, grid, enemy->shape);
+            if (enemy->detectP(player.shape.getPosition(), enemy->shape)) {
+                enemy->shape.setFillColor(sf::Color::Magenta);
         }
         else {
-                enemy.shape.setFillColor(sf::Color::Green);
+                enemy->shape.setFillColor(sf::Color::Green);
         }
-            window.draw(enemy.shape);
+            window.draw(enemy->shape);
         }
         window.draw(player.shape);
+        window.draw(objet.shape);
            
         window.display();
     }
