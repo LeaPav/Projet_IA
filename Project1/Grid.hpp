@@ -22,8 +22,9 @@ public:
     void draw(sf::RenderWindow& window);
     Cell& getCell(int x, int y);
     std::vector<std::vector<Cell>> cells;
+    std::vector<std::vector<int>> vGrid;
 private:
-    //std::vector<std::vector<Cell>> cells;
+    
 };
 
 #endif      

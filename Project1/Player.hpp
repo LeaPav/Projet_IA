@@ -7,7 +7,7 @@ class Player : public Entity {
 public:
     static constexpr float SPEED = 200.0f;
     Player(float x, float y);
-    void update(float deltaTime, Grid& grid) override;
+    void update(float deltaTime, Grid& grid, sf::RectangleShape& forme) override;
 };
 
 #endif // PLAYER_HPP

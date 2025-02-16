@@ -33,14 +33,18 @@ std::vector<sf::Vector2i> Pathfinding::findPath(Grid& grid, sf::Vector2i start, 
             {current->position.x + 1, current->position.y},
             {current->position.x - 1, current->position.y},
             {current->position.x, current->position.y + 1},
-            {current->position.x, current->position.y - 1}
+            {current->position.x, current->position.y - 1},
+            {current->position.x + 1, current->position.y + 1},  
+            {current->position.x - 1, current->position.y - 1}, 
+            {current->position.x + 1, current->position.y - 1}, 
+            {current->position.x - 1, current->position.y + 1}   
         };
 
         for (sf::Vector2i& neighborPos : neighbors) {
             if (neighborPos.x < 0 || neighborPos.x >= GRID_WIDTH || neighborPos.y < 0 || neighborPos.y >= GRID_HEIGHT)
                 continue;
-           /* if (grid.cells[neighborPos.y][neighborPos.x] == 1 || visited[neighborPos.y][neighborPos.x])
-                continue;*/
+            if (grid.cells[neighborPos.y][neighborPos.x].walkable == 1 || visited[neighborPos.y][neighborPos.x])
+                continue;
 
             Node* neighbor = new Node(neighborPos);
             neighbor->parent = current;

@@ -7,18 +7,17 @@
 
 const int WINDOW_WIDTH = 835;
 const int WINDOW_HEIGHT = 565;
-
 int main() {
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Jeu SFML - IA Ennemis");
     window.setFramerateLimit(60);
-
+  
     Player player(200, 400);
-    std::vector<Enemy> enemies = { Enemy(100, 100), Enemy(700, 100) };
+    std::vector<Enemy> enemies = {Enemy(700, 100) };
+    Enemy Enel(100, 100);
     Grid grid;
     grid.loadFromFile("map.txt");
-
+    enemies.push_back(Enel);
     sf::Clock clock;
-
     while (window.isOpen()) {
         sf::Time dt = clock.restart();
         float deltaTime = dt.asSeconds();
@@ -28,17 +27,17 @@ int main() {
             if (event.type == sf::Event::Closed)
                 window.close();
         }
-
-        player.update(deltaTime, grid);
-        for (auto& enemy : enemies) {
-            enemy.update(deltaTime, grid);
-        }
+        player.update(deltaTime, grid, player.shape);
+       
 
         window.clear();
         grid.draw(window);
-        window.draw(player.shape);
-        for (const auto& enemy : enemies)
+        for (auto& enemy : enemies) {
+            enemy.update(deltaTime, grid, enemy.shape);
             window.draw(enemy.shape);
+        }
+        window.draw(player.shape);
+           
         window.display();
     }
     return 0;
