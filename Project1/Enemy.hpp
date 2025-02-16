@@ -21,7 +21,7 @@ public:
     int pathIndex;
     sf::Clock moveClock;
     bool needsRepath;
-
+    float detectionRadius;
 
 
     void setPath(std::vector<Vector2i> newPath);
@@ -30,6 +30,7 @@ public:
     void search();
     void chase(Vector2f playerPos, RectangleShape& form);
     void protect();
+    bool  detectP(Vector2f playerPos, RectangleShape& form);
 private:
     
     State currentState;

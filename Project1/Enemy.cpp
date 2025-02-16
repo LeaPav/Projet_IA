@@ -43,22 +43,24 @@ void Enemy::patrol(sf::RectangleShape& forme, Grid& grid) {
         isWalkable(newBoundsE.left + newBoundsE.width - 1, newBoundsE.top + newBoundsE.height - 1)) {
         forme.setPosition(position);
     }
+
   
- /*   else{
-        needsRepath = true;
-    }
-    if (needsRepath || path.empty()) {
-        path = Pathfinding::findPath(grid,
-            sf::Vector2i(static_cast<int>(newPositionE.x), static_cast<int>(newPositionE.y)),
-            sf::Vector2i(static_cast<int>(target.x), static_cast<int>(target.y)));
-        pathIndex = 0;
-        needsRepath = false;
-    }
-    if (!path.empty() && pathIndex < path.size()) {
-        Vector2i test(position) = path[pathIndex];
-        if (pathIndex != path.size() - 1)
-            pathIndex++;
-    }*/
+    //else{
+    //    needsRepath = true;
+    //}
+    //if (needsRepath /*|| path.empty()*/) {
+    //    path = Pathfinding::findPath(grid,
+    //        sf::Vector2i(static_cast<int>(newPositionE.x), static_cast<int>(newPositionE.y)),
+    //        sf::Vector2i(static_cast<int>(target.x), static_cast<int>(target.y)));
+    //    pathIndex = 0;
+    //    needsRepath = false;
+    //}
+    //if (!path.empty() && pathIndex < path.size()) {
+    //    sf::Vector2i test = path[pathIndex];
+    //    position = sf::Vector2f(test.x * CELL_SIZE, test.y * CELL_SIZE);
+    //    if (pathIndex < path.size() - 1)
+    //        pathIndex++;
+    //}
 }
 
 void Enemy::chase(sf::Vector2f playerPos, RectangleShape& form) {
@@ -83,7 +85,12 @@ void Enemy::protect(){
 
 
 }
-
+bool  Enemy::detectP(Vector2f playerPos, RectangleShape& form) {
+    float radiusDetect = 50;
+    detectionRadius = 50;
+    float distance = std::sqrt(std::pow(playerPos.x - form.getPosition().x, 2) + std::pow(playerPos.y - form.getPosition().y, 2));
+    return (distance < detectionRadius);
+}
 
 
 
@@ -108,12 +115,16 @@ void Enemy::protect(){
 
 
 void Enemy::update(float deltaTime, Grid& grid,RectangleShape& forme) {
-   
+    patrol(forme, grid);
    /* if (currentIndexPath >= path.size())
         return;*/
     switch (currentState) {
     case PATROL:
         patrol(forme,grid);
+        /*if (detectP()) {
+            currentState = CHASE; 
+            
+        }*/
         //if (/*fonction de détection du player*/) currentState = CHASE;
   /*  }*/
     //case CHASE:

@@ -29,11 +29,22 @@ int main() {
         }
         player.update(deltaTime, grid, player.shape);
        
-
+        /*if (Enel.detectP(player.shape.getPosition(), Enel.shape)) {
+            Enel.shape.setFillColor(sf::Color::Magenta);
+        }
+        else {
+            Enel.shape.setFillColor(sf::Color::Green);
+        }*/
         window.clear();
         grid.draw(window);
         for (auto& enemy : enemies) {
             enemy.update(deltaTime, grid, enemy.shape);
+            if (enemy.detectP(player.shape.getPosition(), enemy.shape)) {
+                enemy.shape.setFillColor(sf::Color::Magenta);
+        }
+        else {
+                enemy.shape.setFillColor(sf::Color::Green);
+        }
             window.draw(enemy.shape);
         }
         window.draw(player.shape);
