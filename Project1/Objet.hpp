@@ -5,7 +5,6 @@
 #include "Grid.hpp"
 #include <cmath>
 #include <SFML/Graphics.hpp>
-#include"Player.hpp"
 using namespace sf;
 using namespace std;
 class Objet :  public Entity{
@@ -15,5 +14,4 @@ public:
 	bool recupObj = false;
 	void update(float deltaTime, Grid& grid, RectangleShape& forme) override;
 	void coliP(Player& player, RectangleShape& forme, RenderWindow& window);
-
 };

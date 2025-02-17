@@ -19,7 +19,8 @@ int main() {
 
     auto enemy1 = std::make_unique<Enemy>(100, 100);
     auto enemy2 = std::make_unique<Enemy>(700, 100);
-    Objet objet(150,150);
+    Objet objet(496,39.5);
+    objet.shape.setFillColor(Color::Red);
     enemies.push_back(std::move(enemy1));
     enemies.push_back(std::move(enemy2));
     sf::Clock clock;
@@ -33,10 +34,11 @@ int main() {
                 window.close();
         }
         player.update(deltaTime, grid, player.shape);
-        objet.update(deltaTime, grid, objet.shape);
-        objet.coliP(player, objet.shape, window);
+        
+
         window.clear();
         grid.draw(window);
+        objet.coliP(player, objet.shape, window);
         for (auto& enemy : enemies) {
             enemy->update(deltaTime, grid, enemy->shape);
             if (enemy->detectP(player.shape.getPosition(), enemy->shape)) {
@@ -48,7 +50,7 @@ int main() {
             window.draw(enemy->shape);
         }
         window.draw(player.shape);
-        window.draw(objet.shape);
+        
            
         window.display();
     }
