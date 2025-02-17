@@ -1,25 +1,29 @@
 #ifndef ENEMY_HPP
 #define ENEMY_HPP
-
 #include "Entity.hpp"
 #include "Player.hpp"
 #include "Pathfinding.hpp"
 #include <iostream>
-
 class Enemy : public Entity {
 public:
-
-    enum State;
-    static constexpr float SPEED = 100.0f;
     Enemy(float x, float y);
+    enum State { PATROL, CHASE, SEARCH, PROTECT };
+    static constexpr float SPEED = 100.0f;
+
+    sf::Vector2f position;
+    std::vector<sf::Vector2i> path;
+    int pathIndex;
+    sf::Clock moveClock;
+    bool needsRepath;
+    float detectionRadius;
 
     void setPath(std::vector<sf::Vector2i> newPath);
     void setTarget(const sf::Vector2i& target);
     void detectPlayer(Grid& grid, const sf::Vector2i& playerPos);
     void update(float deltaTime, Grid& grid, sf::Vector2i& playerPos) override;
     void moveAlongPath(float deltaTime, Grid& grid);
-   
 private:
+    
     State currentState;
     sf::Vector2i gridPosition;
     std::vector<sf::Vector2i> path;

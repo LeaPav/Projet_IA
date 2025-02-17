@@ -4,6 +4,7 @@
 
 Player::Player(float x, float y) : Entity(x, y, sf::Color::Blue) {}
 
+
 void Player::update(float deltaTime, Grid& grid, sf::Vector2i& playerPos) {
     sf::Vector2f movement(0.f, 0.f);
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z)) movement.y -= SPEED * deltaTime;
@@ -13,9 +14,8 @@ void Player::update(float deltaTime, Grid& grid, sf::Vector2i& playerPos) {
 
     sf::Vector2f newPosition = shape.getPosition() + movement;
     sf::FloatRect newBounds(newPosition, shape.getSize());
-
-    // Vérifier les quatre coins du joueur
-    auto isWalkable = [&](float x, float y) {
+    // VÃ©rifier les quatre coins du joueur
+   auto isWalkable = [&](float x, float y) {
         int gridX = static_cast<int>(x / CELL_SIZE);
         int gridY = static_cast<int>(y / CELL_SIZE);
         return gridX >= 0 && gridX < GRID_WIDTH && gridY >= 0 && gridY < GRID_HEIGHT && grid.getCell(gridX, gridY).walkable;

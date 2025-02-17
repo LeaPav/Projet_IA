@@ -26,8 +26,8 @@ public:
     void setPlayerPosition(const sf::Vector2i& pos);
     Cell& getCell(int x, int y);
     std::vector<std::vector<Cell>> cells;
+    std::vector<std::vector<int>> vGrid;
 private:
-   
 };
 
 #endif      
