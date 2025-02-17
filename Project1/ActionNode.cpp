@@ -1,6 +1,9 @@
 #include "ActionNode.hpp"
 
-NodeState ActionNode::execute(){
-    std::cout << "Action: " << actionName << std::endl;
-    return NodeState::SUCCESS;
+bool FunctionA::Execute()  {
+//là on place un truc pour la fonctionA
+    return true;
+}
+bool FunctionB::Execute()  {
+    return true;
 }

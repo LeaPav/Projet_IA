@@ -1,11 +1,6 @@
-#include "Blackboard.hpp"
-
-class ConditionNode : public BTNode {
-private:
-    Blackboard& blackboard;
-    std::string key;
-    int expectedValue;
+#include "NodeState.hpp"
+class ConditionNode :public NodeS {
 public:
-    ConditionNode(Blackboard& bb, const std::string& key, int value) : blackboard(bb), key(key), expectedValue(value) {}
-    NodeState execute() override;
+
+    bool Execute() override;
 };
