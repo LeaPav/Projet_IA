@@ -65,6 +65,7 @@ void Enemy::update(float deltaTime, Grid& grid, sf::Vector2i& playerPos) {
         break;
 
     case PROTECT:
+
         break;
 
     default:

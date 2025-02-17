@@ -44,7 +44,7 @@ int main() {
         for (auto& enemy : enemies) {
             enemy->update(deltaTime, grid, playerGridPos);
         }
-
+ 
         window.clear();
         grid.draw(window);
         objet.coliP(player, objet.shape, window);
