@@ -43,6 +43,11 @@ void Grid::draw(sf::RenderWindow& window) {
     }
 }
 
+void Grid::setPlayerPosition(const sf::Vector2i& pos)
+{
+    playerPosition = pos;
+}
+
 Cell& Grid::getCell(int x, int y) {
     return cells[y][x];
 }

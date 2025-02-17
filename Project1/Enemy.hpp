@@ -1,15 +1,9 @@
 #ifndef ENEMY_HPP
 #define ENEMY_HPP
 #include "Entity.hpp"
-#include <iostream>
-#include <SFML/Graphics.hpp>
+#include "Player.hpp"
 #include "Pathfinding.hpp"
-#include "Grid.hpp"
-#include"Player.hpp"
-#include <cmath>
-#include <vector>
-using namespace sf;
-using namespace std;
+#include <iostream>
 class Enemy : public Entity {
 public:
     Enemy(float x, float y);
@@ -23,19 +17,27 @@ public:
     bool needsRepath;
     float detectionRadius;
 
-
-    void setPath(std::vector<Vector2i> newPath);
-    void update(float deltaTime, Grid& grid, RectangleShape& forme) override;
-    void patrol(RectangleShape& forme, Grid& grid);
-    void search();
-    void chase(Vector2f playerPos, RectangleShape& form);
-    void protect();
-    bool  detectP(Vector2f playerPos, RectangleShape& form);
+    void setPath(std::vector<sf::Vector2i> newPath);
+    void setTarget(const sf::Vector2i& target);
+    void detectPlayer(Grid& grid, const sf::Vector2i& playerPos);
+    void update(float deltaTime, Grid& grid, sf::Vector2i& playerPos) override;
+    void moveAlongPath(float deltaTime, Grid& grid);
 private:
     
     State currentState;
-    Vector2i gridPosition;
+    sf::Vector2i gridPosition;
+    std::vector<sf::Vector2i> path;
+    std::vector<sf::Vector2i> searchTargets;
+
+
+    sf::Vector2i lastKnownPlayerPos;
     int currentIndexPath = 0;
+    sf::Vector2i targetPosition;
+
+    void chase(Grid& grid, const sf::Vector2i& playerPos, float deltaTime);
+    void patrol(float deltaTime, Grid& grid);
+    std::vector<sf::Vector2i> searchPoints(sf::Vector2i lastKnownPos);
+    void search(float deltaTime, Grid& grid);
 };
 
 #endif // ENEMY_HPP
