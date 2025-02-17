@@ -1,7 +1,9 @@
 #include "Enemy.hpp"
 #include <cmath>
 
-enum Enemy::State { PATROL, CHASE, SEARCH, PROTECT };
+using namespace sf;
+using namespace std;
+
 Enemy::Enemy(float x, float y) : Entity(x, y, sf::Color::Red), currentState(PATROL) {}
 
 void Enemy::setPath(std::vector<sf::Vector2i> newPath)
@@ -20,11 +22,11 @@ void Enemy::setTarget(const sf::Vector2i& target)
 
 void Enemy::detectPlayer(Grid& grid, const sf::Vector2i& playerPos)
 {
-    sf::Vector2i enemyPos = getGridPosition();
+   sf::Vector2i enemyPos = getGridPosition();
 
     int distance = std::abs(enemyPos.x - playerPos.x) + std::abs(enemyPos.y - playerPos.y);
 
-    if (distance < 4 && currentState != CHASE) {
+    if (distance < 4 && lineOfSight(grid, playerPos)) {
             currentState = CHASE;
             setTarget(playerPos);
             setPath(Pathfinding::findPath(grid, enemyPos, playerPos));
@@ -164,4 +166,28 @@ void Enemy::search(float deltaTime, Grid& grid)
     }
 
     moveAlongPath(deltaTime, grid);
+}
+
+bool Enemy::lineOfSight(Grid& grid, const sf::Vector2i& playerPos)
+{
+    sf::Vector2i enemyPos = getGridPosition();
+
+
+    int dx = std::abs(playerPos.x - enemyPos.x);
+    int dy = std::abs(playerPos.y - enemyPos.y);
+    int sx = (enemyPos.x < playerPos.x) ? 1 : -1;
+    int sy = (enemyPos.y < playerPos.y) ? 1 : -1;
+    int err = dx - dy;
+
+    while (enemyPos.x != playerPos.x || enemyPos.y != playerPos.y) {
+        if (!grid.getCell(enemyPos.x, enemyPos.y).walkable) {
+            return false;
+        }
+
+        int e2 = 2 * err;
+        if (e2 > -dy) { err -= dy; enemyPos.x += sx; }
+        if (e2 < dx) { err += dx; enemyPos.y += sy; }
+    }
+
+    return true; 
 }

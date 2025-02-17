@@ -4,12 +4,12 @@
 #include "Entity.hpp"
 #include "Player.hpp"
 #include "Pathfinding.hpp"
-#include <iostream>
+
+#include "stdafx.hpp"
 
 class Enemy : public Entity {
 public:
-
-    enum State;
+    enum State { PATROL, CHASE, SEARCH, PROTECT };
     static constexpr float SPEED = 100.0f;
     Enemy(float x, float y);
 
@@ -34,6 +34,10 @@ private:
     void patrol(float deltaTime, Grid& grid);
     std::vector<sf::Vector2i> searchPoints(sf::Vector2i lastKnownPos);
     void search(float deltaTime, Grid& grid);
+
+    bool lineOfSight(Grid& grid, const sf::Vector2i& playerPos);
+    bool isObstructed(Grid& grid, sf::Vector2f start, sf::Vector2f end);
+
 };
 
 #endif // ENEMY_HPP

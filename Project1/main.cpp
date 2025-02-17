@@ -1,9 +1,8 @@
-#include <SFML/Graphics.hpp>
+#include "stdafx.hpp"
 #include "Player.hpp"
 #include "Enemy.hpp"
 #include "Grid.hpp"
 #include "Pathfinding.hpp"
-#include <vector>
 
 
 const int WINDOW_WIDTH = 835;

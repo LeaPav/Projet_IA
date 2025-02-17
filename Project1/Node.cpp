@@ -1,5 +1,4 @@
 #include "Node.hpp"
-#include <cmath>
 
 Node::Node(sf::Vector2i pos) : position(pos), gCost(0), hCost(0), fCost(0), parent(nullptr) {}
 

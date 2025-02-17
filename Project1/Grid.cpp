@@ -1,7 +1,4 @@
 #include "grid.hpp"
-#include <fstream>
-#include <iostream>
-
 
 Grid::Grid() {
     cells.resize(GRID_HEIGHT, std::vector<Cell>(GRID_WIDTH, { true, {0, 0}, sf::RectangleShape(sf::Vector2f(CELL_SIZE, CELL_SIZE)) }));
@@ -50,4 +47,11 @@ void Grid::setPlayerPosition(const sf::Vector2i& pos)
 
 Cell& Grid::getCell(int x, int y) {
     return cells[y][x];
+}
+
+bool Grid::isWall(sf::Vector2i pos)
+{
+    if (pos.x < 0 || pos.y < 0 || pos.x >= GRID_WIDTH || pos.y >= GRID_HEIGHT) 
+        return true;
+    return cells[pos.y][pos.x].walkable == '1';
 }

@@ -1,10 +1,7 @@
 #ifndef GRID_HPP
 #define GRID_HPP
 
-#include <vector>
-#include <SFML/Graphics.hpp>
-#include <string>
-
+#include "stdafx.hpp"
 #include "Entity.hpp"
 
 const int GRID_WIDTH = 25;
@@ -26,6 +23,8 @@ public:
     void setPlayerPosition(const sf::Vector2i& pos);
     Cell& getCell(int x, int y);
     std::vector<std::vector<Cell>> cells;
+
+    bool isWall(sf::Vector2i pos);
 private:
    
 };

@@ -1,7 +1,7 @@
 #ifndef NODE_HPP
 #define NODE_HPP
 
-#include <SFML/System/Vector2.hpp>
+#include "stdafx.hpp"
 
 struct Node {
     sf::Vector2i position;
