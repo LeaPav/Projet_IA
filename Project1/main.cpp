@@ -2,6 +2,7 @@
 #include "Player.hpp"
 #include "Enemy.hpp"
 #include "Grid.hpp"
+#include "Pathfinding.hpp"
 #include <vector>
 
 
@@ -13,10 +14,15 @@ int main() {
     window.setFramerateLimit(60);
 
     Player player(200, 400);
-    std::vector<Enemy> enemies = { Enemy(100, 100), Enemy(700, 100) };
     Grid grid;
     grid.loadFromFile("map.txt");
+    std::vector<std::unique_ptr<Enemy>> enemies;
 
+    auto enemy1 = std::make_unique<Enemy>(100, 100);
+    auto enemy2 = std::make_unique<Enemy>(700, 100);
+
+    enemies.push_back(std::move(enemy1));
+    enemies.push_back(std::move(enemy2));
     sf::Clock clock;
 
     while (window.isOpen()) {
@@ -29,16 +35,19 @@ int main() {
                 window.close();
         }
 
-        player.update(deltaTime, grid);
+        
+        sf::Vector2i playerGridPos = player.getGridPosition();
+        player.update(deltaTime, grid, playerGridPos);
+   
         for (auto& enemy : enemies) {
-            enemy.update(deltaTime, grid);
+            enemy->update(deltaTime, grid, playerGridPos);
         }
 
         window.clear();
         grid.draw(window);
         window.draw(player.shape);
         for (const auto& enemy : enemies)
-            window.draw(enemy.shape);
+            window.draw(enemy->shape);
         window.display();
     }
     return 0;
