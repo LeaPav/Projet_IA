@@ -26,7 +26,7 @@ void Enemy::detectPlayer(Grid& grid, const sf::Vector2i& playerPos)
 
     int distance = std::abs(enemyPos.x - playerPos.x) + std::abs(enemyPos.y - playerPos.y);
 
-    if (distance < 4 && lineOfSight(grid, playerPos)) {
+    if (distance < 4 && currentState != CHASE && lineOfSight(grid, playerPos)) {
             currentState = CHASE;
             setTarget(playerPos);
             setPath(Pathfinding::findPath(grid, enemyPos, playerPos));
@@ -112,7 +112,7 @@ void Enemy::chase(Grid& grid, const sf::Vector2i& playerPos, float deltaTime)
 
 void Enemy::patrol(float deltaTime, Grid& grid)
 {
-    static std::vector<sf::Vector2i> patrolPoints = { {2,2}, {8,2}, {8,8}, {12,13} };
+    static std::vector<sf::Vector2i> patrolPoints = { {2,2}, {8,2}, {8,8}, {13,20} };
 
     if (path.empty()) {
         targetPosition = patrolPoints[currentIndexPath];

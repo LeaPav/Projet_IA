@@ -40,13 +40,17 @@ int main() {
    
         for (auto& enemy : enemies) {
             enemy->update(deltaTime, grid, playerGridPos);
+            //enemy->updateVisionCone();
         }
 
         window.clear();
         grid.draw(window);
         window.draw(player.shape);
-        for (const auto& enemy : enemies)
+        for (const auto& enemy : enemies) {
             window.draw(enemy->shape);
+           // enemy->drawCone(window);
+        }
+
         window.display();
     }
     return 0;
