@@ -34,8 +34,11 @@ std::vector<sf::Vector2i> Pathfinding::findPath(Grid& grid, sf::Vector2i start, 
             {current->position.x - 1, current->position.y},
             {current->position.x, current->position.y + 1},
             {current->position.x, current->position.y - 1},
+            {current->position.x + 1, current->position.y + 1},  
+            {current->position.x - 1, current->position.y - 1}, 
+            {current->position.x + 1, current->position.y - 1}, 
+            {current->position.x - 1, current->position.y + 1}  
           
-
         };
 
         bool keepGoing = false;
