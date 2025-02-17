@@ -17,7 +17,8 @@ public:
     void setTarget(const sf::Vector2i& target);
     void detectPlayer(Grid& grid, const sf::Vector2i& playerPos);
     void update(float deltaTime, Grid& grid, sf::Vector2i& playerPos) override;
-    void moveAlongPath(float deltaTime, Grid& grid);
+    void drawFov(RenderWindow& window, Grid& grid);
+    void moveAlongPath(float deltaTime, Grid& grid, const Vector2i& playerPos);
    
 private:
     State currentState;
@@ -29,15 +30,23 @@ private:
     sf::Vector2i lastKnownPlayerPos;
     int currentIndexPath = 0;
     sf::Vector2i targetPosition;
+    vector<Vector2i> patrolPoints;
+    // champ de vision
 
+    float fovAngle = 45.f;
+    float fovDistance = 6.0f;
+    float rotationAngle = 0.0f;
+
+    void initPatrol(Grid& grid);
     void chase(Grid& grid, const sf::Vector2i& playerPos, float deltaTime);
-    void patrol(float deltaTime, Grid& grid);
+    void patrol(float deltaTime, Grid& grid, const Vector2i& playerPos);
     std::vector<sf::Vector2i> searchPoints(sf::Vector2i lastKnownPos);
-    void search(float deltaTime, Grid& grid);
+    void search(float deltaTime, Grid& grid, const Vector2i& playerPos);
 
     bool lineOfSight(Grid& grid, const sf::Vector2i& playerPos);
-    bool isObstructed(Grid& grid, sf::Vector2f start, sf::Vector2f end);
 
+    Vector2f getDirection();
+    Vector2f castRay(Grid& grid, Vector2f start, float angle);
 };
 
 #endif // ENEMY_HPP

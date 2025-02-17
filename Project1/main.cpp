@@ -40,7 +40,7 @@ int main() {
    
         for (auto& enemy : enemies) {
             enemy->update(deltaTime, grid, playerGridPos);
-            //enemy->updateVisionCone();
+            
         }
 
         window.clear();
@@ -48,7 +48,7 @@ int main() {
         window.draw(player.shape);
         for (const auto& enemy : enemies) {
             window.draw(enemy->shape);
-           // enemy->drawCone(window);
+           enemy->drawFov(window, grid);
         }
 
         window.display();
