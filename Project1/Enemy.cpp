@@ -70,6 +70,7 @@ void Enemy::update(float deltaTime, Grid& grid, Vector2i& playerPos) {
 
 void Enemy::updateCastRay(Grid& grid, const Vector2i& playerPos)
 {
+   
     circleCenter = shape.getPosition() + Vector2f(CELL_SIZE / 2, CELL_SIZE / 2);
 
     float moveSpeed = 0.05f;
@@ -87,7 +88,8 @@ void Enemy::updateCastRay(Grid& grid, const Vector2i& playerPos)
         segments[i][1].position = endPoint;
 
         Vector2f intersection;
-        bool hitWallOrPlayer = false;
+        bool hitWall = false;
+        bool hitPlayer = false;
 
         Vector2f currentPos = circleCenter;
         Vector2f rayDir = Vector2f(cos(angle), sin(angle));
@@ -100,13 +102,14 @@ void Enemy::updateCastRay(Grid& grid, const Vector2i& playerPos)
 
             if (gridPos.x < 0 || gridPos.y < 0 || gridPos.x >= GRID_WIDTH || gridPos.y >= GRID_HEIGHT)
                 break; 
+   
             Vector2f playerWorldPos = Vector2f(playerPos.x * CELL_SIZE, playerPos.y * CELL_SIZE);
             FloatRect playerBounds(playerWorldPos.x, playerWorldPos.y, CELL_SIZE, CELL_SIZE);
 
             if (doesSegmentIntersectRectangle(segments[i][0].position, segments[i][1].position, playerBounds, intersection)) {
                 segments[i][1].position = intersection;
-                hitWallOrPlayer = true;
-                playerInSight = true;
+                hitPlayer = true;
+         
             }
  
             if (!grid.getCell(gridPos.x, gridPos.y).walkable) 
@@ -116,20 +119,22 @@ void Enemy::updateCastRay(Grid& grid, const Vector2i& playerPos)
                 if (doesSegmentIntersectRectangle(segments[i][0].position, segments[i][1].position, cellBounds, intersection))
                 {
                     segments[i][1].position = intersection;
-                    hitWallOrPlayer = true;
+                    hitWall = true;
                 }
                 break; 
             }
         }
 
-
-        if (hitWallOrPlayer)
+        if (hitPlayer && !hitWall) {
+            playerInSight = true;
+        }
+        if (hitWall)
         {
 
             segments[i][0].color = Color::Blue;
             segments[i][1].color = Color::Blue;
         }
-        else
+        if(hitPlayer)
         {
             segments[i][0].color = Color::Red;
             segments[i][1].color = Color::Red;
@@ -179,19 +184,13 @@ void Enemy::drawFov(RenderWindow& window, Grid& grid)
 void Enemy::drawCastRay(RenderWindow& window, Grid& grid, const Vector2i& playerPos)
 {
     
-    float radius = 10;
-
-    CircleShape circle(radius);
-    circle.setPosition(shape.getPosition());
-    circle.setFillColor(Color(0, 255, 0, 100));
-
-
+   
     Vector2f direction = getDirection();
 
     angleRange = 30.f * 3.14159f / 180.0f;
     segmentLength = 150.f;
 
-    window.draw(circle);
+  
     updateCastRay(grid, playerPos);
     for (auto& segment : segments) {
         window.draw(segment);

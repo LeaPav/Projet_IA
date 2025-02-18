@@ -15,13 +15,13 @@ int main() {
     Player player(200, 400);
     Grid grid;
     grid.loadFromFile("map.txt");
-    std::vector<std::unique_ptr<Enemy>> enemies;
+    vector<unique_ptr<Enemy>> enemies;
 
-    auto enemy1 = std::make_unique<Enemy>(100, 100);
-    auto enemy2 = std::make_unique<Enemy>(700, 100);
+    auto enemy1 = make_unique<Enemy>(100, 100);
+    auto enemy2 = make_unique<Enemy>(700, 100);
 
-    enemies.push_back(std::move(enemy1));
-    enemies.push_back(std::move(enemy2));
+    enemies.push_back(move(enemy1));
+    enemies.push_back(move(enemy2));
     sf::Clock clock;
 
     while (window.isOpen()) {
