@@ -3,7 +3,6 @@
 
 //enum Enemy::State { PATROL, CHASE, SEARCH, PROTECT, BEHEVIOR };
 Enemy::Enemy(float x, float y) : Entity(x, y, sf::Color::Red), currentState(PATROL) {
-    myTree.b.SetValue("EnemyPosition", shape.getPosition());
 }
 
 void Enemy::setPath(std::vector<sf::Vector2i> newPath)

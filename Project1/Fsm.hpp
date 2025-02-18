@@ -1,14 +1,18 @@
 #pragma once
 
 #include "SelctorNode.hpp"
-#include "Enemy.hpp"
+#include "NodeState.hpp"
+#include"Blackboard.hpp"
+#include"ActionNode.hpp"
+#include"SequenceNode.hpp"
+#include "ConditionNode.hpp"
 
 class FSM {
 public:
-    FSM(Enemy& enemyRef);
-    void run(float deltaTime, Grid& grid, sf::Vector2i& playerPos);
+    FSM();
+    void run(float deltaTime, Grid& grid, sf::Vector2i& playerPos,Enemy* enemy);
     void Behevior();
-    Enemy& enemy;
-    SelectorNode BeheviorTree;
+    void InitBehevior(Enemy& enemy,Player& player);
+private:
 };
 

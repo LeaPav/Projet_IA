@@ -4,7 +4,6 @@
 #include "Entity.hpp"
 #include "Player.hpp"
 #include "Pathfinding.hpp"
-#include "SelctorNode.hpp"
 #include <iostream>
 
 class Enemy : public Entity {
@@ -26,7 +25,6 @@ public:
     void chase(Grid& grid, const sf::Vector2i& playerPos, float deltaTime);
     void patrol(float deltaTime, Grid& grid);
 private:
-    SelectorNode myTree;
     State currentState;
     sf::Vector2i gridPosition;
     std::vector<sf::Vector2i> path;

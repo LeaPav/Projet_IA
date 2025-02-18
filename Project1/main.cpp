@@ -5,7 +5,6 @@
 #include <vector>
 #include "Objet.hpp"
 #include "Enemy.hpp"
-#include "Fsm.hpp"
 
 
 const int WINDOW_WIDTH = 835;
@@ -17,17 +16,14 @@ int main() {
 
     Player player(200, 400);
     Grid grid;
-
     grid.loadFromFile("map.txt");
     std::vector<std::unique_ptr<Enemy>> enemies;
     auto enemy1 = std::make_unique<Enemy>(100, 100);
     auto enemy2 = std::make_unique<Enemy>(700, 100);
-    Objet objet(496,39.5);
-    
-    objet.shape.setFillColor(sf::Color::Red);
+    Objet testobj(496, 39.5);
+    testobj.shape.setFillColor(sf::Color::Red);
     enemies.push_back(std::move(enemy1));
     enemies.push_back(std::move(enemy2));
-    FSM test(*enemies[0]);
     sf::Clock clock;
     while (window.isOpen()) {
         sf::Time dt = clock.restart();
@@ -48,8 +44,8 @@ int main() {
  
         window.clear();
         grid.draw(window);
-        //test();
-        objet.coliP(player, objet.shape, window);
+        
+        testobj.coliP(player, testobj.shape, window);
         window.draw(player.shape);
         for (const auto& enemy : enemies)
             window.draw(enemy->shape);
