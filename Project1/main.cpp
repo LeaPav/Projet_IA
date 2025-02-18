@@ -47,8 +47,8 @@ int main() {
         grid.draw(window);
         window.draw(player.shape);
         for (const auto& enemy : enemies) {
-            window.draw(enemy->shape);
-           enemy->drawFov(window, grid);
+            enemy->draw(window);
+            enemy->drawFov(window, grid);
         }
 
         window.display();

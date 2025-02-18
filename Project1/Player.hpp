@@ -10,6 +10,8 @@ public:
     void update(float deltaTime, Grid& grid, sf::Vector2i& playerPos) override;
 
     sf::Vector2f getPosition() const;
+
+    FloatRect getGlobalBounds() const; 
 };
 
 #endif // PLAYER_HPP

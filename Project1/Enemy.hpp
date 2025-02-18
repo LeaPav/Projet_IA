@@ -17,14 +17,28 @@ public:
     void setTarget(const sf::Vector2i& target);
     void detectPlayer(Grid& grid, const sf::Vector2i& playerPos);
     void update(float deltaTime, Grid& grid, sf::Vector2i& playerPos) override;
+    void updateCastRay(Grid& grid);
+    void draw(RenderWindow& window);
     void drawFov(RenderWindow& window, Grid& grid);
+    void drawCastRay(RenderWindow& window);
     void moveAlongPath(float deltaTime, Grid& grid, const Vector2i& playerPos);
-   
+
+    bool doesSegmentIntersect(Vector2f p1, Vector2f p2, Vector2f q1, Vector2f q2, sf::Vector2f& intersection);
+    bool doesSegmentIntersectRectangle(Vector2f p1, Vector2f p2, FloatRect rect, sf::Vector2f& intersection);
+
 private:
     State currentState;
     sf::Vector2i gridPosition;
     std::vector<sf::Vector2i> path;
     std::vector<sf::Vector2i> searchTargets;
+
+
+    vector<VertexArray> segments;
+    Vector2f circleCenter;
+    float moveSpeed = 0.05;
+    float angleRange = 30.f * (3.14159f / 180.f); ;
+    const int numSegments = 25;
+    float segmentLength = 150.f;
 
 
     sf::Vector2i lastKnownPlayerPos;
@@ -43,10 +57,13 @@ private:
     std::vector<sf::Vector2i> searchPoints(sf::Vector2i lastKnownPos);
     void search(float deltaTime, Grid& grid, const Vector2i& playerPos);
 
-    bool lineOfSight(Grid& grid, const sf::Vector2i& playerPos);
+    bool lineOfSight(Grid& grid, const sf::Vector2i& player);
 
     Vector2f getDirection();
     Vector2f castRay(Grid& grid, Vector2f start, float angle);
+
+
+    
 };
 
 #endif // ENEMY_HPP

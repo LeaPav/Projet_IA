@@ -35,3 +35,8 @@ sf::Vector2f Player::getPosition() const
     return shape.getPosition();
 }
 
+FloatRect Player::getGlobalBounds() const
+{
+    return shape.getGlobalBounds();
+}
+

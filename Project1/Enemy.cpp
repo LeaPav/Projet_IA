@@ -4,7 +4,9 @@
 using namespace sf;
 using namespace std;
 
-Enemy::Enemy(float x, float y) : Entity(x, y, Color::Red), currentState(PATROL) {}
+Enemy::Enemy(float x, float y) : Entity(x, y, Color::Red), currentState(PATROL), circleCenter(400, 400) {
+    segments.resize(numSegments, VertexArray(Lines, 2));
+}
 
 void Enemy::setPath(vector<Vector2i> newPath)
 {
@@ -76,7 +78,7 @@ void Enemy::detectPlayer(Grid& grid, const Vector2i& playerPos)
 void Enemy::update(float deltaTime, Grid& grid, Vector2i& playerPos) {
 
     detectPlayer(grid, playerPos);
-
+    updateCastRay(grid);
     switch (currentState) {
     case PATROL:
         shape.setFillColor(Color::Red);
@@ -109,6 +111,79 @@ void Enemy::update(float deltaTime, Grid& grid, Vector2i& playerPos) {
     }
 }
 
+void Enemy::updateCastRay(Grid& grid)
+{
+    float moveSpeed = 0.05f;
+    Vector2f direction = getDirection();
+    float directionAngle = atan2(direction.y, direction.x);
+
+    for (int i = 0; i < numSegments; ++i)
+    {
+
+        float angle = directionAngle + (-angleRange / 2 + (angleRange * i / (numSegments - 1)));
+        Vector2f endPoint(circleCenter.x + segmentLength * cos(angle), circleCenter.y + segmentLength * sin(angle));
+
+        segments[i][0].position = circleCenter;
+        segments[i][1].position = endPoint;
+
+        Vector2f intersection;
+        bool hitWall = false;
+
+        Vector2f currentPos = circleCenter;
+        Vector2f rayDir = Vector2f(cos(angle), sin(angle));
+
+        for (float j = 0; j < segmentLength; j += 1.0f) 
+        {
+            currentPos += rayDir;
+
+            Vector2i gridPos(static_cast<int>(currentPos.x / CELL_SIZE), static_cast<int>(currentPos.y / CELL_SIZE));
+
+            if (gridPos.x < 0 || gridPos.y < 0 || gridPos.x >= GRID_WIDTH || gridPos.y >= GRID_HEIGHT)
+                break; 
+
+            if (!grid.getCell(gridPos.x, gridPos.y).walkable) 
+            {
+                FloatRect cellBounds(gridPos.x * CELL_SIZE, gridPos.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+
+                if (doesSegmentIntersectRectangle(segments[i][0].position, segments[i][1].position, cellBounds, intersection))
+                {
+                    segments[i][1].position = intersection;
+                    hitWall = true;
+                }
+                break; 
+            }
+        }
+
+
+        if (hitWall)
+        {
+            segments[i][0].color = Color::Blue;
+            segments[i][1].color = Color::Blue;
+        }
+        else
+        {
+            segments[i][0].color = Color::Red;
+            segments[i][1].color = Color::Red;
+        }
+    }
+}
+
+void Enemy::draw(RenderWindow& window)
+{
+    
+    window.draw(shape);
+
+   /* RectangleShape line(Vector2f(24.0f, 2.0f));
+    line.setPosition(shape.getPosition());
+    line.setFillColor(Color::Blue);
+    window.draw(line);*/
+    Vector2f circleCenter(400, 300);
+    float radius = 10;
+
+    drawCastRay(window);
+  
+}
+
 void Enemy::drawFov(RenderWindow& window, Grid& grid)
 {
     ConvexShape fovShape;
@@ -130,6 +205,27 @@ void Enemy::drawFov(RenderWindow& window, Grid& grid)
     fovShape.setPoint(2, rightPoint);
 
     window.draw(fovShape);
+}
+
+void Enemy::drawCastRay(RenderWindow& window)
+{
+    
+    float radius = 10;
+
+    CircleShape circle(radius);
+    circle.setPosition(shape.getPosition());
+    circle.setFillColor(Color(0, 255, 0, 100));
+
+
+    Vector2f direction = getDirection();
+
+    angleRange = 30.f * 3.14159f / 180.0f;
+    segmentLength = 150.f;
+
+    window.draw(circle);
+    for (auto& segment : segments) {
+        window.draw(segment);
+    }
 }
 
 void Enemy::moveAlongPath(float deltaTime, Grid& grid, const Vector2i& playerPos)
@@ -164,6 +260,68 @@ void Enemy::moveAlongPath(float deltaTime, Grid& grid, const Vector2i& playerPos
             currentIndexPath++;
         }
     }
+}
+
+bool Enemy::doesSegmentIntersect(Vector2f p1, Vector2f p2, Vector2f q1, Vector2f q2, Vector2f& intersection)
+{
+    auto cross = [](Vector2f v1, Vector2f v2) {
+        return v1.x * v2.y - v1.y * v2.x;
+        };
+
+    Vector2f r = p2 - p1;
+    Vector2f s = q2 - q1;
+
+    float rxs = cross(r, s);
+    float qpxr = cross(q1 - p1, r);
+
+    if (rxs == 0 && qpxr == 0)
+        return false;
+
+    if (rxs == 0)
+        return false;
+
+    float t = cross(q1 - p1, s) / rxs;
+    float u = cross(q1 - p1, r) / rxs;
+
+    if ((t >= 0 && t <= 1) && (u >= 0 && u <= 1))
+    {
+        intersection = p1 + t * r;
+        return true;
+    }
+    return false;
+}
+
+bool Enemy::doesSegmentIntersectRectangle(Vector2f p1, Vector2f p2, FloatRect rect, Vector2f& intersection)
+{
+
+    Vector2f topLeft(rect.left, rect.top);
+    Vector2f topRight(rect.left + rect.width, rect.top);
+    Vector2f bottomLeft(rect.left, rect.top + rect.height);
+    Vector2f bottomRight(rect.left + rect.width, rect.top + rect.height);
+
+    Vector2f tempIntersection;
+    bool hasIntersection = false;
+    float minDist = numeric_limits<float>::max();
+
+    auto checkIntersection = [&](Vector2f q1, Vector2f q2) {
+        if (doesSegmentIntersect(p1, p2, q1, q2, tempIntersection))
+        {
+            float dist = hypot(tempIntersection.x - p1.x, tempIntersection.y - p1.y);
+            if (dist < minDist)
+            {
+                minDist = dist;
+                intersection = tempIntersection;
+                hasIntersection = true;
+            }
+        }
+        };
+
+    checkIntersection(topLeft, topRight);
+    checkIntersection(topRight, bottomRight);
+    checkIntersection(bottomRight, bottomLeft);
+    checkIntersection(bottomLeft, topLeft);
+
+    return hasIntersection;
 }
 
 void Enemy::initPatrol(Grid& grid)
