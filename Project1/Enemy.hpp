@@ -17,10 +17,10 @@ public:
     void setTarget(const sf::Vector2i& target);
     void detectPlayer(Grid& grid, const sf::Vector2i& playerPos);
     void update(float deltaTime, Grid& grid, sf::Vector2i& playerPos) override;
-    void updateCastRay(Grid& grid);
+    void updateCastRay(Grid& grid,const Vector2i& playerPos);
     void draw(RenderWindow& window);
     void drawFov(RenderWindow& window, Grid& grid);
-    void drawCastRay(RenderWindow& window);
+    void drawCastRay(RenderWindow& window, Grid& grid, const Vector2i& playerPos);
     void moveAlongPath(float deltaTime, Grid& grid, const Vector2i& playerPos);
 
     bool doesSegmentIntersect(Vector2f p1, Vector2f p2, Vector2f q1, Vector2f q2, sf::Vector2f& intersection);
@@ -39,7 +39,7 @@ private:
     float angleRange = 30.f * (3.14159f / 180.f); ;
     const int numSegments = 25;
     float segmentLength = 150.f;
-
+    bool playerInSight = false;
 
     sf::Vector2i lastKnownPlayerPos;
     int currentIndexPath = 0;

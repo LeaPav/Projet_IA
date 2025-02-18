@@ -24,78 +24,35 @@ void Enemy::setTarget(const Vector2i& target)
 
 void Enemy::detectPlayer(Grid& grid, const Vector2i& playerPos)
 {
-   //Vector2i enemyPos = getGridPosition();
-
-   // int distance = abs(enemyPos.x - playerPos.x) + abs(enemyPos.y - playerPos.y);
-
-    Vector2f enemyPos = shape.getPosition();
-    Vector2f playerWorldPos = Vector2f(playerPos.x * CELL_SIZE, playerPos.y * CELL_SIZE);
-
-    float distance = sqrt(pow(playerWorldPos.x - enemyPos.x, 2) + pow(playerWorldPos.y - enemyPos.y, 2));
-
-    if (distance > fovDistance * CELL_SIZE) {
-        if (currentState == CHASE) {
-            currentState = SEARCH;
-            searchTargets = searchPoints(lastKnownPlayerPos);
-        }
-        return;
-    }
-
-    Vector2f enemyDirection = getDirection();
-
-    Vector2f directionToPlayer = playerWorldPos - enemyPos;
-    float norm = sqrt(directionToPlayer.x * directionToPlayer.x + directionToPlayer.y * directionToPlayer.y);
-    if (norm > 0) directionToPlayer /= norm;
-
-    float dotProduct = enemyDirection.x * directionToPlayer.x + enemyDirection.y * directionToPlayer.y;
-    float angleToPlayer = acos(dotProduct) * 180.0 / 3.14159f;
-
-    bool playerVisible = (angleToPlayer < fovAngle * 0.5f) && lineOfSight(grid, playerPos);
-
-    if (playerVisible && currentState !=CHASE) {
+   
+    if (playerInSight && currentState !=CHASE) {
         currentState = CHASE;
         lastKnownPlayerPos = playerPos;
 
         setTarget(playerPos);
         setPath(Pathfinding::findPath(grid, getGridPosition(), playerPos));
     }
-    else if (currentState == CHASE && !playerVisible) {
+    else if (currentState == CHASE && !playerInSight) {
         currentState = SEARCH;
         searchTargets = searchPoints(lastKnownPlayerPos);
     }
-    /*if (distance < 4 && currentState != CHASE && lineOfSight(grid, playerPos)) {
-            currentState = CHASE;
-            setTarget(playerPos);
-            setPath(Pathfinding::findPath(grid, enemyPos, playerPos));
 
-    }
-    else if (distance > 10 && currentState == CHASE) {
-        currentState = SEARCH;
-        searchTargets = searchPoints(playerPos);
-    }*/
 }
 
 void Enemy::update(float deltaTime, Grid& grid, Vector2i& playerPos) {
 
+    updateCastRay(grid, playerPos);
     detectPlayer(grid, playerPos);
-    updateCastRay(grid);
+    
     switch (currentState) {
     case PATROL:
         shape.setFillColor(Color::Red);
         patrol(deltaTime, grid, playerPos);
   
         break;
-        //fonction de patrouille
-         //if (/*fonction de détection du player*/) currentState = CHASE;
-         //break;
-
     case CHASE:
         shape.setFillColor(Color::Magenta);
         chase(grid, playerPos, deltaTime);
-        //fonction de chase avec le pathfinding
-         //if (!/*fonction de détection du player*/) {
-         //    currentState = SEARCH;
-         //}
         break;
 
     case SEARCH:
@@ -111,12 +68,15 @@ void Enemy::update(float deltaTime, Grid& grid, Vector2i& playerPos) {
     }
 }
 
-void Enemy::updateCastRay(Grid& grid)
+void Enemy::updateCastRay(Grid& grid, const Vector2i& playerPos)
 {
+    circleCenter = shape.getPosition() + Vector2f(CELL_SIZE / 2, CELL_SIZE / 2);
+
     float moveSpeed = 0.05f;
     Vector2f direction = getDirection();
     float directionAngle = atan2(direction.y, direction.x);
 
+    playerInSight = false;
     for (int i = 0; i < numSegments; ++i)
     {
 
@@ -127,7 +87,7 @@ void Enemy::updateCastRay(Grid& grid)
         segments[i][1].position = endPoint;
 
         Vector2f intersection;
-        bool hitWall = false;
+        bool hitWallOrPlayer = false;
 
         Vector2f currentPos = circleCenter;
         Vector2f rayDir = Vector2f(cos(angle), sin(angle));
@@ -140,7 +100,15 @@ void Enemy::updateCastRay(Grid& grid)
 
             if (gridPos.x < 0 || gridPos.y < 0 || gridPos.x >= GRID_WIDTH || gridPos.y >= GRID_HEIGHT)
                 break; 
+            Vector2f playerWorldPos = Vector2f(playerPos.x * CELL_SIZE, playerPos.y * CELL_SIZE);
+            FloatRect playerBounds(playerWorldPos.x, playerWorldPos.y, CELL_SIZE, CELL_SIZE);
 
+            if (doesSegmentIntersectRectangle(segments[i][0].position, segments[i][1].position, playerBounds, intersection)) {
+                segments[i][1].position = intersection;
+                hitWallOrPlayer = true;
+                playerInSight = true;
+            }
+ 
             if (!grid.getCell(gridPos.x, gridPos.y).walkable) 
             {
                 FloatRect cellBounds(gridPos.x * CELL_SIZE, gridPos.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
@@ -148,15 +116,16 @@ void Enemy::updateCastRay(Grid& grid)
                 if (doesSegmentIntersectRectangle(segments[i][0].position, segments[i][1].position, cellBounds, intersection))
                 {
                     segments[i][1].position = intersection;
-                    hitWall = true;
+                    hitWallOrPlayer = true;
                 }
                 break; 
             }
         }
 
 
-        if (hitWall)
+        if (hitWallOrPlayer)
         {
+
             segments[i][0].color = Color::Blue;
             segments[i][1].color = Color::Blue;
         }
@@ -180,7 +149,7 @@ void Enemy::draw(RenderWindow& window)
     Vector2f circleCenter(400, 300);
     float radius = 10;
 
-    drawCastRay(window);
+   
   
 }
 
@@ -207,7 +176,7 @@ void Enemy::drawFov(RenderWindow& window, Grid& grid)
     window.draw(fovShape);
 }
 
-void Enemy::drawCastRay(RenderWindow& window)
+void Enemy::drawCastRay(RenderWindow& window, Grid& grid, const Vector2i& playerPos)
 {
     
     float radius = 10;
@@ -223,6 +192,7 @@ void Enemy::drawCastRay(RenderWindow& window)
     segmentLength = 150.f;
 
     window.draw(circle);
+    updateCastRay(grid, playerPos);
     for (auto& segment : segments) {
         window.draw(segment);
     }
@@ -422,30 +392,6 @@ void Enemy::search(float deltaTime, Grid& grid, const Vector2i& playerPos)
     }
 
     moveAlongPath(deltaTime, grid, playerPos);
-}
-
-bool Enemy::lineOfSight(Grid& grid, const Vector2i& playerPos)
-{
-    Vector2i enemyPos = getGridPosition();
-
-
-    int dx = abs(playerPos.x - enemyPos.x);
-    int dy = abs(playerPos.y - enemyPos.y);
-    int sx = (enemyPos.x < playerPos.x) ? 1 : -1;
-    int sy = (enemyPos.y < playerPos.y) ? 1 : -1;
-    int err = dx - dy;
-
-    while (enemyPos.x != playerPos.x || enemyPos.y != playerPos.y) {
-        if (!grid.getCell(enemyPos.x, enemyPos.y).walkable) {
-            return false;
-        }
-
-        int e2 = 2 * err;
-        if (e2 > -dy) { err -= dy; enemyPos.x += sx; }
-        if (e2 < dx) { err += dx; enemyPos.y += sy; }
-    }
-
-    return true; 
 }
 
 Vector2f Enemy::getDirection()
