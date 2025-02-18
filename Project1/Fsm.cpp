@@ -3,7 +3,7 @@
 
 FSM::FSM(Enemy& enemyRef) : enemy(enemyRef) {};
 void FSM::Behevior() {
-    BeheviorTree->Execute();
+    
 }
 void FSM::run(float deltaTime, Grid& grid, sf::Vector2i& playerPos) {
     enemy.detectPlayer(grid, playerPos); // Détection du joueur

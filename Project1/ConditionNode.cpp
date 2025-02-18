@@ -1,22 +1,18 @@
 #include"ConditionNode.hpp"
 
 
-void ConditionNode::DistanceM() {
-    //if (enemy.shape.getPosition().x / CELL_SIZE - objet.shape.getPosition().x / CELL_SIZE < player.shape.getPosition().x / CELL_SIZE - objet.shape.getPosition().x / CELL_SIZE) {
-    //    VerifDistance = true;
-    //}
-    //else {
-    //    VerifDistance = false;
-    //}
+ConditionNode::ConditionNode(Blackboard& bb, sf::Vector2f k, sf::Vector2f value)
+    : blackboard(bb), key(k), expectedValue(value) {
 }
-bool ConditionNode::Execute() {
-    //DistanceM();
-    //if (VerifDistance == true) {
-    //    cout << "condition bonne pour behevior tree";
-    //    return true;
-    //}
-    //else {
-    //    cout << "condition fausse pour behevior tree";
-    //    return false;
-    //}
+
+NodeState ConditionNode::execute(){
+
+    sf::Vector2f posPlayer = blackboard.GetValue("player pos");
+    sf::Vector2f posEnemy = expectedValue;
+    float distPlayer = std::hypot(posPlayer.x - objet.shape.getPosition().x,
+        posPlayer.y - objet.shape.getPosition().y);
+    float distEnemy = std::hypot(posEnemy.x - objet.shape.getPosition().x,
+        posEnemy.y - objet.shape.getPosition().y);
+
+    return (distPlayer < distEnemy) ? NodeState::SUCCESS : NodeState::FAILURE;
 }

@@ -1,10 +1,11 @@
+
 #include "NodeState.hpp"
-#include <unordered_map>
-using namespace std;
+
+
 class Blackboard {
 private:
-    unordered_map<std::string, int> data;
+    unordered_map<string, Vector2f> data;
 public:
-    void SetValue(const std::string& key, int value);
-    int GetValue(const std::string& key);
+    void SetValue(const string& key, Vector2f value);
+    Vector2f GetValue(const string& key);
 };

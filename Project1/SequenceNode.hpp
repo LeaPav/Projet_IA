@@ -1,7 +1,7 @@
-#pragma once
 #include "NodeState.hpp"
 
-class SelectorNode : public BTNode {
+
+class SequenceNode : public BTNode {
 private:
     std::vector<std::unique_ptr<BTNode>> children;
 public:

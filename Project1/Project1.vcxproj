@@ -71,8 +71,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\SFML-2.6.2\include</IncludePath>
-    <LibraryPath>C:\SFML-2.6.2\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\et3rn\OneDrive\Documents\SFML-2.6.2-windows-vc17-64-bit %281%29\SFML-2.6.2\include</IncludePath>
+    <LibraryPath>C:\Users\et3rn\OneDrive\Documents\SFML-2.6.2-windows-vc17-64-bit %281%29\SFML-2.6.2\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -147,6 +147,8 @@
     <ClCompile Include="Pathfinding.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SelctorNode.cpp" />
+    <ClCompile Include="SequenceNode.cpp" />
+    <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActionNode.hpp" />
@@ -162,6 +164,7 @@
     <ClInclude Include="Pathfinding.hpp" />
     <ClInclude Include="Player.hpp" />
     <ClInclude Include="SelctorNode.hpp" />
+    <ClInclude Include="SequenceNode.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
