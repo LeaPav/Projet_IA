@@ -9,6 +9,6 @@ public:
     void run(float deltaTime, Grid& grid, sf::Vector2i& playerPos);
     void Behevior();
     Enemy& enemy;
-    SelectorNode* BeheviorTree;
+    SelectorNode BeheviorTree;
 };
 
