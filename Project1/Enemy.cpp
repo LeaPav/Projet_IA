@@ -1,8 +1,10 @@
 #include "Enemy.hpp"
 #include <cmath>
 
-enum Enemy::State { PATROL, CHASE, SEARCH, PROTECT, TEST };
-Enemy::Enemy(float x, float y) : Entity(x, y, sf::Color::Red), currentState(PATROL) {}
+//enum Enemy::State { PATROL, CHASE, SEARCH, PROTECT, BEHEVIOR };
+Enemy::Enemy(float x, float y) : Entity(x, y, sf::Color::Red), currentState(PATROL) {
+    myTree.b.SetValue("EnemyPosition", shape.getPosition());
+}
 
 void Enemy::setPath(std::vector<sf::Vector2i> newPath)
 {
@@ -37,43 +39,43 @@ void Enemy::detectPlayer(Grid& grid, const sf::Vector2i& playerPos)
 }
 
 void Enemy::update(float deltaTime, Grid& grid, sf::Vector2i& playerPos) {
-
-    detectPlayer(grid, playerPos);
-
-    switch (currentState) {
-    case PATROL:
-        shape.setFillColor(sf::Color::Red);
-        patrol(deltaTime, grid);
-  
-        break;
-        //fonction de patrouille
-         //if (/*fonction de détection du player*/) currentState = CHASE;
-         //break;
-
-    case CHASE:
-        shape.setFillColor(sf::Color::Magenta);
-        chase(grid, playerPos, deltaTime);
-        //fonction de chase avec le pathfinding
-         //if (!/*fonction de détection du player*/) {
-         //    currentState = SEARCH;
-         //}
-        break;
-    case TEST:
-        test();
-        break;
-    case SEARCH:
-        shape.setFillColor(sf::Color::Green);
-        search(deltaTime, grid);
-        break;
-
-    case PROTECT:
-        protect();
-        shape.setFillColor(sf::Color::Blue);
-        break;
-
-    default:
-        break;
-    }
+    std::cout << "vide";
+//    detectPlayer(grid, playerPos);
+//
+//    switch (currentState) {
+//    case PATROL:
+//        shape.setFillColor(sf::Color::Red);
+//        patrol(deltaTime, grid);
+//  
+//        break;
+//        //fonction de patrouille
+//         //if (/*fonction de détection du player*/) currentState = CHASE;
+//         //break;
+//
+//    case CHASE:
+//        shape.setFillColor(sf::Color::Magenta);
+//        chase(grid, playerPos, deltaTime);
+//        //fonction de chase avec le pathfinding
+//         //if (!/*fonction de détection du player*/) {
+//         //    currentState = SEARCH;
+//         //}
+//        break;
+//    case BEHEVIOR:
+//        Behevior();
+//        break;
+//    case SEARCH:
+//        shape.setFillColor(sf::Color::Green);
+//        search(deltaTime, grid);
+//        break;
+//
+//    case PROTECT:
+//        protect();
+//        shape.setFillColor(sf::Color::Blue);
+//        break;
+//
+//    default:
+//        break;
+//    }
 }
 
 void Enemy::moveAlongPath(float deltaTime, Grid& grid)
@@ -96,6 +98,8 @@ void Enemy::moveAlongPath(float deltaTime, Grid& grid)
         }
     }
 }
+
+
 
 void Enemy::chase(Grid& grid, const sf::Vector2i& playerPos, float deltaTime)
 {
@@ -169,9 +173,7 @@ void Enemy::search(float deltaTime, Grid& grid)
 
     moveAlongPath(deltaTime, grid);
 }
-void Enemy::test() {
 
-}
 void Enemy::protect() {
 
 }

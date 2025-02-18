@@ -1,6 +1,7 @@
 #pragma once
 #include "ActionNode.hpp"
 #include "ConditionNode.hpp"
+
 class SelectorNode : public NodeS {
 private:
     FunctionA actionA;
@@ -8,5 +9,6 @@ private:
     ConditionNode condition;
 
 public:
+    int b;
     bool Execute() override;
 };
