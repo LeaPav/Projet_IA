@@ -1,17 +1,17 @@
 // player.cpp
 #include "Player.hpp"
 
-Player::Player(float x, float y) : Entity(x, y, sf::Color::Blue) {}
+Player::Player(float x, float y) : Entity(x, y, Color::Blue) {}
 
-void Player::update(float deltaTime, Grid& grid, sf::Vector2i& playerPos) {
-    sf::Vector2f movement(0.f, 0.f);
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z)) movement.y -= SPEED * deltaTime;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) movement.y += SPEED * deltaTime;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) movement.x -= SPEED * deltaTime;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) movement.x += SPEED * deltaTime;
+void Player::update(float deltaTime, Grid& grid, Vector2i& playerPos) {
+    Vector2f movement(0.f, 0.f);
+    if (Keyboard::isKeyPressed(Keyboard::Z)) movement.y -= SPEED * deltaTime;
+    if (Keyboard::isKeyPressed(Keyboard::S)) movement.y += SPEED * deltaTime;
+    if (Keyboard::isKeyPressed(Keyboard::Q)) movement.x -= SPEED * deltaTime;
+    if (Keyboard::isKeyPressed(Keyboard::D)) movement.x += SPEED * deltaTime;
 
-    sf::Vector2f newPosition = shape.getPosition() + movement;
-    sf::FloatRect newBounds(newPosition, shape.getSize());
+    Vector2f newPosition = shape.getPosition() + movement;
+    FloatRect newBounds(newPosition, shape.getSize());
 
     // Vérifier les quatre coins du joueur
     auto isWalkable = [&](float x, float y) {
@@ -30,7 +30,7 @@ void Player::update(float deltaTime, Grid& grid, sf::Vector2i& playerPos) {
     grid.setPlayerPosition(getGridPosition());
 }
 
-sf::Vector2f Player::getPosition() const
+Vector2f Player::getPosition() const
 {
     return shape.getPosition();
 }

@@ -2,8 +2,8 @@
 
 class ActionNode : public BTNode {
 private:
-    std::string actionName;
+    string actionName;
 public:
-    ActionNode(std::string name) : actionName(name) {}
+    ActionNode(string name) : actionName(name) {}
     NodeState execute() override;
 };

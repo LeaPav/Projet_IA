@@ -7,9 +7,9 @@ class Player : public Entity {
 public:
     static constexpr float SPEED = 200.0f;
     Player(float x, float y);
-    void update(float deltaTime, Grid& grid, sf::Vector2i& playerPos) override;
+    void update(float deltaTime, Grid& grid, Vector2i& playerPos) override;
 
-    sf::Vector2f getPosition() const;
+    Vector2f getPosition() const;
 
     FloatRect getGlobalBounds() const; 
 };

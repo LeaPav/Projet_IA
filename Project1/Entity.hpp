@@ -7,14 +7,14 @@
 class Grid;
 class Entity {
 public:
-    sf::RectangleShape shape;
-    sf::Vector2f velocity;
+    RectangleShape shape;
+    Vector2f velocity;
 
-    Entity(float x, float y, sf::Color color);
+    Entity(float x, float y, Color color);
     virtual ~Entity() = default;
-    virtual void update(float deltaTime, Grid& grid, sf::Vector2i& playerPos) = 0;
+    virtual void update(float deltaTime, Grid& grid, Vector2i& playerPos) = 0;
 
-    virtual sf::Vector2i getGridPosition() const;
+    virtual Vector2i getGridPosition() const;
 };
 
 #endif // ENTITY_HPP

@@ -1,38 +1,38 @@
 #include "grid.hpp"
 
 Grid::Grid() {
-    cells.resize(GRID_HEIGHT, std::vector<Cell>(GRID_WIDTH, { true, {0, 0}, sf::RectangleShape(sf::Vector2f(CELL_SIZE, CELL_SIZE)) }));
+    cells.resize(GRID_HEIGHT, vector<Cell>(GRID_WIDTH, { true, {0, 0}, RectangleShape(Vector2f(CELL_SIZE, CELL_SIZE)) }));
     for (int y = 0; y < GRID_HEIGHT; ++y) {
         for (int x = 0; x < GRID_WIDTH; ++x) {
-            cells[y][x].position = sf::Vector2f(x * CELL_SIZE, y * CELL_SIZE);
+            cells[y][x].position = Vector2f(x * CELL_SIZE, y * CELL_SIZE);
             cells[y][x].shape.setPosition(cells[y][x].position);
-            cells[y][x].shape.setFillColor(sf::Color::Transparent);
+            cells[y][x].shape.setFillColor(Color::Transparent);
             cells[y][x].shape.setOutlineThickness(1);
-            cells[y][x].shape.setOutlineColor(sf::Color(50, 50, 50));
+            cells[y][x].shape.setOutlineColor(Color(50, 50, 50));
         }
     }
 }
 
-void Grid::loadFromFile(const std::string& filename) {
-    std::ifstream file(filename);
+void Grid::loadFromFile(const string& filename) {
+    ifstream file(filename);
     if (!file) {
-        std::cerr << "Erreur : Impossible d'ouvrir le fichier " << filename << std::endl;
+        cerr << "Erreur : Impossible d'ouvrir le fichier " << filename << endl;
         return;
     }
 
     for (int y = 0; y < GRID_HEIGHT; ++y) {
-        std::string line;
-        if (!std::getline(file, line)) break;
+        string line;
+        if (!getline(file, line)) break;
         for (int x = 0; x < GRID_WIDTH && x < line.size(); ++x) {
             cells[y][x].walkable = (line[x] == '0');
             if (!cells[y][x].walkable) {
-                cells[y][x].shape.setFillColor(sf::Color::White);
+                cells[y][x].shape.setFillColor(Color::White);
             }
         }
     }
 }
 
-void Grid::draw(sf::RenderWindow& window) {
+void Grid::draw(RenderWindow& window) {
     for (int y = 0; y < GRID_HEIGHT; ++y) {
         for (int x = 0; x < GRID_WIDTH; ++x) {
             window.draw(cells[y][x].shape);
@@ -40,7 +40,7 @@ void Grid::draw(sf::RenderWindow& window) {
     }
 }
 
-void Grid::setPlayerPosition(const sf::Vector2i& pos)
+void Grid::setPlayerPosition(const Vector2i& pos)
 {
     playerPosition = pos;
 }
@@ -49,7 +49,7 @@ Cell& Grid::getCell(int x, int y) {
     return cells[y][x];
 }
 
-bool Grid::isWall(sf::Vector2i pos)
+bool Grid::isWall(Vector2i pos)
 {
     if (pos.x < 0 || pos.y < 0 || pos.x >= GRID_WIDTH || pos.y >= GRID_HEIGHT) 
         return true;

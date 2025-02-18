@@ -1,6 +1,6 @@
 #include "ActionNode.hpp"
 
 NodeState ActionNode::execute(){
-    std::cout << "Action: " << actionName << std::endl;
+    cout << "Action: " << actionName << endl;
     return NodeState::SUCCESS;
 }

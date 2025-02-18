@@ -10,21 +10,21 @@ const int CELL_SIZE = 38;
 
 struct Cell {
     bool walkable;
-    sf::Vector2f position;
-    sf::RectangleShape shape;
+    Vector2f position;
+    RectangleShape shape;
 };
 
 class Grid {
 public:
     Grid();
-    void loadFromFile(const std::string& filename);
-    void draw(sf::RenderWindow& window);
-   sf::Vector2i playerPosition;
-    void setPlayerPosition(const sf::Vector2i& pos);
+    void loadFromFile(const string& filename);
+    void draw(RenderWindow& window);
+   Vector2i playerPosition;
+    void setPlayerPosition(const Vector2i& pos);
     Cell& getCell(int x, int y);
-    std::vector<std::vector<Cell>> cells;
+    vector<vector<Cell>> cells;
 
-    bool isWall(sf::Vector2i pos);
+    bool isWall(Vector2i pos);
 private:
    
 };
