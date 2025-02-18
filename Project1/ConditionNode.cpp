@@ -1,5 +1,7 @@
 #include"ConditionNode.hpp"
 bool ConditionNode::Execute() {
-    // là on va faire la condition 
-    return; //.....;
+    if (int caca = 5) {
+        cout << "test nul";
+    }
+    return true;
 }

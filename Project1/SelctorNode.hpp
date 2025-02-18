@@ -1,4 +1,4 @@
-#include "NodeState.hpp"
+#pragma once
 #include "ActionNode.hpp"
 #include "ConditionNode.hpp"
 class SelectorNode : public NodeS {
