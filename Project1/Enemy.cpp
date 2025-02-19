@@ -128,17 +128,10 @@ void Enemy::updateCastRay(Grid& grid, const Vector2i& playerPos)
         if (hitPlayer && !hitWall) {
             playerInSight = true;
         }
-        if (hitWall)
-        {
-
-            segments[i][0].color = Color::Blue;
-            segments[i][1].color = Color::Blue;
-        }
-        if(hitPlayer)
-        {
-            segments[i][0].color = Color::Red;
-            segments[i][1].color = Color::Red;
-        }
+        
+        segments[i][0].color = Color::Yellow;
+        segments[i][1].color = Color::Yellow;
+        
     }
 }
 
