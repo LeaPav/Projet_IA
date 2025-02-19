@@ -147,15 +147,10 @@ void Enemy::draw(RenderWindow& window)
     
     window.draw(shape);
 
-   /* RectangleShape line(Vector2f(24.0f, 2.0f));
-    line.setPosition(shape.getPosition());
-    line.setFillColor(Color::Blue);
-    window.draw(line);*/
     Vector2f circleCenter(400, 300);
     float radius = 10;
 
-   
-  
+
 }
 
 void Enemy::drawFov(RenderWindow& window, Grid& grid)
