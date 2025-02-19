@@ -7,22 +7,24 @@ void FSM::Behevior() {
 }
 void FSM::InitBehevior(Enemy& enemy, Player& player) {
     
-    //Blackboard blackboard;
-    //blackboard.SetValue("player pos", player.shape.getPosition());
-    //auto root = std::make_unique<SelectorNode>();
-    //auto sequenceProtect = std::make_unique<SequenceNode>();
-    //auto sequencePatrol = std::make_unique<SequenceNode>();
+    
+    blackboard.SetValue("player pos", player.shape.getPosition());
+    root = make_unique<SelectorNode>();
+    sequenceProtect = make_unique<SequenceNode>();
+    sequencePatrol = make_unique<SequenceNode>();
 
 
-    //sequenceProtect->AddChild(std::make_unique<ConditionNode>(blackboard, blackboard.GetValue("player pos"), enemy.shape.getPosition()));
-    //sequenceProtect->AddChild(std::make_unique<ActionNode1>("Protection de l'item"));
+    sequenceProtect->AddChild(std::make_unique<ConditionNode>(blackboard, blackboard.GetValue("player pos"), enemy.shape.getPosition()));
 
 
-    //sequencePatrol->AddChild(std::make_unique<ActionNode2>("Patrouiller"));
 
-    //root->AddChild(std::move(sequenceProtect));
-    //root->AddChild(std::move(sequencePatrol));
-    //root->execute();
+    sequenceProtect->AddChild(std::make_unique<ActionNode1>("Protection de l'item", enemy));
+    sequencePatrol->AddChild(std::make_unique<ActionNode2>("Patrouiller", enemy));
+    //problème dans les arguments de ActionNode , on a besoin d'un pointeur d'enemy
+
+    root->AddChild(std::move(sequenceProtect));
+    root->AddChild(std::move(sequencePatrol));
+    root->execute();
 }
 void FSM::run(float deltaTime, Grid& grid, sf::Vector2i& playerPos,Enemy* enemy) {
     enemy->detectPlayer(grid, playerPos);

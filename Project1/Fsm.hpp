@@ -6,7 +6,8 @@
 #include"ActionNode.hpp"
 #include"SequenceNode.hpp"
 #include "ConditionNode.hpp"
-
+using namespace std;
+using namespace sf;
 class FSM {
 public:
     FSM();
@@ -14,5 +15,9 @@ public:
     void Behevior();
     void InitBehevior(Enemy& enemy,Player& player);
 private:
+    Blackboard blackboard;
+    unique_ptr<SelectorNode> root ;
+    unique_ptr<SequenceNode>sequenceProtect;
+    unique_ptr<SequenceNode>sequencePatrol;
 };
 
