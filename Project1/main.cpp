@@ -9,6 +9,8 @@ const int WINDOW_WIDTH = 835;
 const int WINDOW_HEIGHT = 565;
 
 int main() {
+    srand((unsigned)time(0));
+
     RenderWindow window(VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Jeu SFML - IA Ennemis");
     window.setFramerateLimit(60);
 

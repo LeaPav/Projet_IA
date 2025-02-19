@@ -5,6 +5,7 @@ using namespace sf;
 using namespace std;
 
 Enemy::Enemy(float x, float y) : Entity(x, y, Color::Red), currentState(PATROL), circleCenter(400, 400) {
+   
     segments.resize(numSegments, VertexArray(Lines, 2));
 }
 
@@ -24,26 +25,30 @@ void Enemy::setTarget(const Vector2i& target)
 
 void Enemy::detectPlayer(Grid& grid, const Vector2i& playerPos)
 {
-   
+
     if (playerInSight && currentState !=CHASE) {
         currentState = CHASE;
         lastKnownPlayerPos = playerPos;
 
         setTarget(playerPos);
         setPath(Pathfinding::findPath(grid, getGridPosition(), playerPos));
-    }
-    else if (currentState == CHASE && !playerInSight) {
-        currentState = SEARCH;
-        searchTargets = searchPoints(lastKnownPlayerPos);
-    }
 
+    }
+   
+    else if (currentState == CHASE && !playerInSight) {
+        if (time.asSeconds() > 3) {
+            currentState = SEARCH;
+            searchTargets = searchPoints(lastKnownPlayerPos);
+
+        }  
+    }
 }
 
 void Enemy::update(float deltaTime, Grid& grid, Vector2i& playerPos) {
 
     updateCastRay(grid, playerPos);
     detectPlayer(grid, playerPos);
-    
+
     switch (currentState) {
     case PATROL:
         shape.setFillColor(Color::Red);
@@ -51,6 +56,7 @@ void Enemy::update(float deltaTime, Grid& grid, Vector2i& playerPos) {
   
         break;
     case CHASE:
+        time = clock.getElapsedTime();
         shape.setFillColor(Color::Magenta);
         chase(grid, playerPos, deltaTime);
         break;
@@ -127,6 +133,7 @@ void Enemy::updateCastRay(Grid& grid, const Vector2i& playerPos)
 
         if (hitPlayer && !hitWall) {
             playerInSight = true;
+            clock.restart();
         }
         
         segments[i][0].color = Color::Yellow;
@@ -172,7 +179,6 @@ void Enemy::drawFov(RenderWindow& window, Grid& grid)
 void Enemy::drawCastRay(RenderWindow& window, Grid& grid, const Vector2i& playerPos)
 {
     
-   
     Vector2f direction = getDirection();
 
     angleRange = 30.f * 3.14159f / 180.0f;

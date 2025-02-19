@@ -32,7 +32,6 @@ private:
     vector<Vector2i> path;
     vector<Vector2i> searchTargets;
 
-
     vector<VertexArray> segments;
     Vector2f circleCenter;
     float moveSpeed = 0.05;
@@ -57,12 +56,12 @@ private:
     vector<Vector2i> searchPoints(Vector2i lastKnownPos);
     void search(float deltaTime, Grid& grid, const Vector2i& playerPos);
 
-    bool lineOfSight(Grid& grid, const Vector2i& player);
-
+ 
     Vector2f getDirection();
     Vector2f castRay(Grid& grid, Vector2f start, float angle);
 
-
+    Clock clock;
+    Time time;
     
 };
 
