@@ -62,7 +62,7 @@ private:
     float fovAngle = 45.f;
     float fovDistance = 6.0f;
     float rotationAngle = 0.0f;
-
+    float protectTimer = 0.0f;
     void initPatrol(Grid& grid);
 
 

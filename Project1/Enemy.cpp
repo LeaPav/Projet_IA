@@ -345,7 +345,14 @@ void Enemy::protect(float deltaTime, Grid& grid, const Vector2i& objetPos) {
         setPath(Pathfinding::findPath(grid, getGridPosition(), objetPos));
     }
     moveAlongPath(deltaTime, grid, objetPos);
-    
+    protectTimer += deltaTime;
+
+    if (protectTimer >= 10.0f) {
+        setCurrentState(PATROL);
+        currentIndexPath = 0;
+        path.clear();
+        protectTimer = 0.0f; 
+    }   
 }
 Vector2f Enemy::getDirection()
 {

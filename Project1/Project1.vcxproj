@@ -71,8 +71,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>D:\T7\SFML 2.6.12 64bits\include;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\T7\SFML 2.6.12 64bits\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\et3rn\OneDrive\Documents\SFML-2.6.2-windows-vc17-64-bit %281%29\SFML-2.6.2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\et3rn\OneDrive\Documents\SFML-2.6.2-windows-vc17-64-bit %281%29\SFML-2.6.2\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>C:\SFML-2.6.2\include;$(IncludePath)</IncludePath>
