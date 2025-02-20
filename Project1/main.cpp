@@ -7,11 +7,11 @@
 #include "Objet.hpp"
 
 
-const int WINDOW_WIDTH = 835;
-const int WINDOW_HEIGHT = 565;
+const int WINDOW_WIDTH = 1785;
+const int WINDOW_HEIGHT = 910;
 
 int main() {
-    srand((unsigned)time(0));
+    srand(static_cast<unsigned>(time(nullptr)));
 
     RenderWindow window(VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Jeu SFML - IA Ennemis");
     window.setFramerateLimit(60);
@@ -37,6 +37,9 @@ int main() {
         while (window.pollEvent(event)) {
             if (event.type == Event::Closed)
                 window.close();
+            if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape) {
+                window.close();
+            }
         }
 
         

@@ -4,8 +4,8 @@
 #include "stdafx.hpp"
 #include "Entity.hpp"
 
-const int GRID_WIDTH = 25;
-const int GRID_HEIGHT = 15;
+const int GRID_WIDTH = 48;
+const int GRID_HEIGHT = 28;
 const int CELL_SIZE = 38;
 
 struct Cell {
