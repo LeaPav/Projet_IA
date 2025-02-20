@@ -26,10 +26,16 @@ int main() {
 
     auto enemy1 = make_unique<Enemy>(100, 100);
     auto enemy2 = make_unique<Enemy>(1600, 500);
+    auto enemy3= make_unique<Enemy>(1100, 800);
+    auto enemy4 = make_unique<Enemy>(500, 500);
+
     Objet objet(496,39.5);
     objet.shape.setFillColor(Color::Red);
+
     enemies.push_back(move(enemy1));
     enemies.push_back(move(enemy2));
+    enemies.push_back(move(enemy3));
+    enemies.push_back(move(enemy4));
     Clock clock;
 
     while (window.isOpen()) {

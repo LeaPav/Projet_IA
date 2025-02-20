@@ -249,8 +249,11 @@ void Enemy::initPatrol(Grid& grid)
         int x = rand() % maxX;
         int y = rand() % maxY;
         if (grid.getCell(x, y).walkable) {
-            cout << x << " " << y << endl;
-            patrolPoints.push_back(Vector2i(x, y));
+            //cout << x << " " << y << endl;
+            vector<Vector2i> testPath = Pathfinding::findPath(grid, getGridPosition(), Vector2i(x, y));
+            if (!testPath.empty()) {
+                patrolPoints.push_back(Vector2i(x, y));
+            }
         }
         attempts++;
     }
