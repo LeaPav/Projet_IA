@@ -1,6 +1,7 @@
 #include "Enemy.hpp"
 #include <cmath>
 
+
 Enemy::Enemy(float x, float y) : Entity(x, y, Color::Red), currentState(PATROL), circleCenter(400, 400) {
 
     segments.resize(numSegments, VertexArray(Lines, 2));
@@ -18,6 +19,7 @@ void Enemy::setPath(vector<Vector2i> newPath)
 void Enemy::setTarget(const Vector2i& target)
 {
     targetPosition = target;
+   
 }
 
 void Enemy::detectPlayer(Grid& grid, const Vector2i& playerPos)
@@ -41,34 +43,8 @@ void Enemy::detectPlayer(Grid& grid, const Vector2i& playerPos)
     }
 }
 
-void Enemy::update(float deltaTime, Grid& grid, Vector2i& playerPos) {
+void Enemy::update(float deltaTime, Grid& grid, sf::Vector2i& playerPos) {
 
-    updateCastRay(grid, playerPos);
-    detectPlayer(grid, playerPos);
-
-    switch (currentState) {
-    case PATROL:
-        shape.setFillColor(Color::Red);
-        patrol(deltaTime, grid, playerPos);
-
-        break;
-    case CHASE:
-        time = clock.getElapsedTime();
-        shape.setFillColor(Color::Magenta);
-        chase(grid, playerPos, deltaTime);
-        break;
-
-    case SEARCH:
-        shape.setFillColor(Color::Green);
-        search(deltaTime, grid, playerPos);
-        break;
-
-    case PROTECT:
-        break;
-
-    default:
-        break;
-    }
 }
 
 void Enemy::updateCastRay(Grid& grid, const Vector2i& playerPos)
@@ -360,7 +336,7 @@ vector<Vector2i> Enemy::searchPoints(Vector2i lastKnownPos)
 void Enemy::search(float deltaTime, Grid& grid, const Vector2i& playerPos)
 {
     if (searchTargets.empty()) {
-        currentState = PATROL;
+        currentState = BEHEVIOR;
         currentIndexPath = 0;
         path.clear();
         return;
@@ -384,6 +360,7 @@ void Enemy::search(float deltaTime, Grid& grid, const Vector2i& playerPos)
     moveAlongPath(deltaTime, grid, playerPos);
 }
 
+void Enemy::protect() {
 Vector2f Enemy::getDirection()
 {
     if (path.empty() || currentIndexPath >= path.size())

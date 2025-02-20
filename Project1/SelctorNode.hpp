@@ -1,12 +1,10 @@
 #pragma once
-#include "ActionNode.hpp"
-#include "ConditionNode.hpp"
-class SelectorNode : public NodeS {
-private:
-    FunctionA actionA;
-    FunctionB actionB;
-    ConditionNode condition;
+#include "NodeState.hpp"
 
+class SelectorNode : public BTNode {
+private:
+    std::vector<std::unique_ptr<BTNode>> children;
 public:
-    bool Execute() override;
+    void AddChild(std::unique_ptr<BTNode> child);
+    NodeState execute() override;
 };

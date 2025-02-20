@@ -1,11 +1,11 @@
 #include "stdafx.hpp"
 #include "Player.hpp"
-#include "Enemy.hpp"
 #include "Grid.hpp"
 #include "Pathfinding.hpp"
 #include <vector>
 #include "Objet.hpp"
-
+#include "Enemy.hpp"
+#include "Fsm.hpp"
 
 const int WINDOW_WIDTH = 1785;
 const int WINDOW_HEIGHT = 910;
@@ -19,6 +19,8 @@ int main() {
     Player player(200, 400);
     Grid grid;
     grid.loadFromFile("map.txt");
+    
+    
     vector<unique_ptr<Enemy>> enemies;
 
     auto enemy1 = make_unique<Enemy>(100, 100);
@@ -45,15 +47,18 @@ int main() {
         
         Vector2i playerGridPos = player.getGridPosition();
         player.update(deltaTime, grid, playerGridPos);
-        
         for (auto& enemy : enemies) {
+            FSM fsm(*enemy);
+            fsm.InitBehevior(*enemy, player);
+            fsm.run(deltaTime, grid, playerGridPos, *enemy);
             enemy->update(deltaTime, grid, playerGridPos);
             
         }
  
         window.clear();
         grid.draw(window);
-        objet.coliP(player, objet.shape, window);
+        
+        testobj.coliP(player, testobj.shape, window);
         window.draw(player.shape);
         for (const auto& enemy : enemies) {
             enemy->draw(window);

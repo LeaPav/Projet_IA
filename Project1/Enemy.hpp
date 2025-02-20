@@ -1,6 +1,5 @@
 #ifndef ENEMY_HPP
 #define ENEMY_HPP
-
 #include "Entity.hpp"
 #include "Player.hpp"
 #include "Pathfinding.hpp"
@@ -22,7 +21,9 @@ public:
     void drawFov(RenderWindow& window, Grid& grid);
     void drawCastRay(RenderWindow& window, Grid& grid, const Vector2i& playerPos);
     void moveAlongPath(float deltaTime, Grid& grid, const Vector2i& playerPos);
-
+    State getCurrentState() const { return currentState; }
+    State setCurrentState(State Nstate){return currentState = Nstate;}
+    sf::RectangleShape& getShape() { return shape; }
     bool doesSegmentIntersect(Vector2f p1, Vector2f p2, Vector2f q1, Vector2f q2, Vector2f& intersection);
     bool doesSegmentIntersectRectangle(Vector2f p1, Vector2f p2, FloatRect rect, Vector2f& intersection);
 
