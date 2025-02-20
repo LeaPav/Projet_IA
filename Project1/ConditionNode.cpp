@@ -12,9 +12,9 @@ void ConditionNode::ObjCord(Objet& objet) {
 NodeState ConditionNode::execute(){
     sf::Vector2f posPlayer = blackboard.GetValue("player pos");
     sf::Vector2f posEnemy = expectedValue;
-    float distPlayer = std::hypot(posPlayer.x - objCordx,
+    float distPlayer = hypot(posPlayer.x - objCordx,
         posPlayer.y - objCordy);
-    float distEnemy = std::hypot(posEnemy.x - objCordx,
+    float distEnemy = hypot(posEnemy.x - objCordx,
         posEnemy.y - objCordy);
 
     std::cout << "ok condition : " << distPlayer << "  " << distEnemy << endl;

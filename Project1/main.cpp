@@ -44,13 +44,13 @@ int main() {
             }
         }
 
-        
+        Vector2i objetGridPos = objet.getGridPosition();
         Vector2i playerGridPos = player.getGridPosition();
         player.update(deltaTime, grid, playerGridPos);
         for (auto& enemy : enemies) {
             FSM fsm(*enemy);
             fsm.InitBehevior(*enemy, player);
-            fsm.run(deltaTime, grid, playerGridPos, *enemy);
+            fsm.run(deltaTime, grid, playerGridPos, *enemy, objetGridPos);
             enemy->update(deltaTime, grid, playerGridPos);
             
         }
@@ -58,7 +58,7 @@ int main() {
         window.clear();
         grid.draw(window);
         
-        testobj.coliP(player, testobj.shape, window);
+        objet.coliP(player, objet.shape, window);
         window.draw(player.shape);
         for (const auto& enemy : enemies) {
             enemy->draw(window);

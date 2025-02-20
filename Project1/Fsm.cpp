@@ -22,16 +22,20 @@ void FSM::InitBehevior(Enemy& enemy1, Player& player) {
     root->AddChild(std::move(sequencePatrol));
     
 }
-void FSM::run(float deltaTime, Grid& grid, sf::Vector2i& playerPos,Enemy& enemy) {
+void FSM::run(float deltaTime, Grid& grid, sf::Vector2i& playerPos,Enemy& enemy,Vector2i& objetPos) {
+    enemy.updateCastRay(grid,playerPos);
     enemy.detectPlayer(grid, playerPos);
 
     switch (enemy.getCurrentState()) {
     case Enemy::PATROL:
         enemy.getShape().setFillColor(sf::Color::Red);
-        enemy.patrol(deltaTime, grid);
+        enemy.patrol(deltaTime, grid,playerPos);
         break;
 
     case Enemy::CHASE:
+        timeC_fsm = enemy.getClock().getElapsedTime();
+        enemy.setTime(timeC_fsm);
+        //les deux ligne au dessus corresponde à ça : enemy.time = enemy.getClock().getElapsedTime();
         enemy.getShape().setFillColor(sf::Color::Magenta);
         enemy.chase(grid, playerPos, deltaTime);
         break;
@@ -39,7 +43,7 @@ void FSM::run(float deltaTime, Grid& grid, sf::Vector2i& playerPos,Enemy& enemy)
    
     case Enemy::SEARCH:
         enemy.getShape().setFillColor(sf::Color::Green);
-        enemy.search(deltaTime, grid);
+        enemy.search(deltaTime, grid, playerPos);
 
         break;
 
@@ -50,7 +54,7 @@ void FSM::run(float deltaTime, Grid& grid, sf::Vector2i& playerPos,Enemy& enemy)
 
     case Enemy::PROTECT:
         enemy.getShape().setFillColor(sf::Color::Blue);
-        enemy.protect();
+        enemy.protect(deltaTime, grid, objetPos);
         break;
 
     default:

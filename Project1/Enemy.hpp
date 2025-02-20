@@ -7,8 +7,12 @@
 #include "stdafx.hpp"
 
 class Enemy : public Entity {
+protected: 
+    Clock clock;
+    Time time;
 public:
-    enum State { PATROL, CHASE, SEARCH, PROTECT };
+    enum State { PATROL, CHASE, SEARCH, PROTECT, BEHEVIOR
+    };
     static constexpr float SPEED = 100.0f;
     Enemy(float x, float y);
 
@@ -21,12 +25,21 @@ public:
     void drawFov(RenderWindow& window, Grid& grid);
     void drawCastRay(RenderWindow& window, Grid& grid, const Vector2i& playerPos);
     void moveAlongPath(float deltaTime, Grid& grid, const Vector2i& playerPos);
-    State getCurrentState() const { return currentState; }
-    State setCurrentState(State Nstate){return currentState = Nstate;}
-    sf::RectangleShape& getShape() { return shape; }
     bool doesSegmentIntersect(Vector2f p1, Vector2f p2, Vector2f q1, Vector2f q2, Vector2f& intersection);
     bool doesSegmentIntersectRectangle(Vector2f p1, Vector2f p2, FloatRect rect, Vector2f& intersection);
+    void chase(Grid& grid, const Vector2i& playerPos, float deltaTime);
+    void patrol(float deltaTime, Grid& grid, const Vector2i& playerPos);
+    vector<Vector2i> searchPoints(Vector2i lastKnownPos);
+    void search(float deltaTime, Grid& grid, const Vector2i& playerPos);
+    void protect(float deltaTime, Grid& grid, const Vector2i& objetPos);
 
+
+    RectangleShape& getShape() { return shape; }
+    State getCurrentState() const { return currentState; }
+    State setCurrentState(State Nstate) { return currentState = Nstate; }
+    Clock getClock()const { return clock; }
+    Time setTime(Time Ntime) { return time = Ntime; }
+    Time getTime()const { return time; }
 private:
     State currentState;
     Vector2i gridPosition;
@@ -52,18 +65,10 @@ private:
     float rotationAngle = 0.0f;
 
     void initPatrol(Grid& grid);
-    void chase(Grid& grid, const Vector2i& playerPos, float deltaTime);
-    void patrol(float deltaTime, Grid& grid, const Vector2i& playerPos);
-    vector<Vector2i> searchPoints(Vector2i lastKnownPos);
-    void search(float deltaTime, Grid& grid, const Vector2i& playerPos);
 
- 
+
     Vector2f getDirection();
     Vector2f castRay(Grid& grid, Vector2f start, float angle);
-
-    Clock clock;
-    Time time;
-    
 };
 
 #endif // ENEMY_HPP
