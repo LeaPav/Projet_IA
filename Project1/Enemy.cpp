@@ -348,7 +348,7 @@ void Enemy::protect(float deltaTime, Grid& grid, const Vector2i& objetPos) {
     
     if (getGridPosition().x <= objetPos.x+5 and getGridPosition().y <= objetPos.y + 5){
         protectTimer += deltaTime;
-        if (protectTimer >= 5.0f) {
+        if (protectTimer >= 3.0f) {
             setCurrentState(PATROL);
             currentIndexPath = 0;
             path.clear();
