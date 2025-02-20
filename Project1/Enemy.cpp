@@ -1,9 +1,11 @@
 #include "Enemy.hpp"
 #include <cmath>
 
+using namespace sf;
+using namespace std;
 
 Enemy::Enemy(float x, float y) : Entity(x, y, Color::Red), currentState(PATROL), circleCenter(400, 400) {
-   
+
     segments.resize(numSegments, VertexArray(Lines, 2));
 }
 
@@ -24,7 +26,7 @@ void Enemy::setTarget(const Vector2i& target)
 void Enemy::detectPlayer(Grid& grid, const Vector2i& playerPos)
 {
 
-    if (playerInSight && currentState !=CHASE) {
+    if (playerInSight && currentState != CHASE) {
         currentState = CHASE;
         lastKnownPlayerPos = playerPos;
 
@@ -32,13 +34,13 @@ void Enemy::detectPlayer(Grid& grid, const Vector2i& playerPos)
         setPath(Pathfinding::findPath(grid, getGridPosition(), playerPos));
 
     }
-   
+
     else if (currentState == CHASE && !playerInSight) {
         if (time.asSeconds() > 3) {
             currentState = SEARCH;
             searchTargets = searchPoints(lastKnownPlayerPos);
 
-        }  
+        }
     }
 }
 
@@ -51,24 +53,20 @@ void Enemy::update(float deltaTime, Grid& grid, Vector2i& playerPos) {
     case PATROL:
         shape.setFillColor(Color::Red);
         patrol(deltaTime, grid, playerPos);
-  
+
         break;
     case CHASE:
         time = clock.getElapsedTime();
         shape.setFillColor(Color::Magenta);
         chase(grid, playerPos, deltaTime);
         break;
-    case TEST:
-        test();
-        break;
+
     case SEARCH:
         shape.setFillColor(Color::Green);
         search(deltaTime, grid, playerPos);
         break;
 
     case PROTECT:
-        protect();
-        shape.setFillColor(sf::Color::Blue);
         break;
 
     default:
@@ -78,7 +76,7 @@ void Enemy::update(float deltaTime, Grid& grid, Vector2i& playerPos) {
 
 void Enemy::updateCastRay(Grid& grid, const Vector2i& playerPos)
 {
-   
+
     circleCenter = shape.getPosition() + Vector2f(CELL_SIZE / 2, CELL_SIZE / 2);
 
     float moveSpeed = 0.05f;
@@ -102,25 +100,25 @@ void Enemy::updateCastRay(Grid& grid, const Vector2i& playerPos)
         Vector2f currentPos = circleCenter;
         Vector2f rayDir = Vector2f(cos(angle), sin(angle));
 
-        for (float j = 0; j < segmentLength; j += 1.0f) 
+        for (float j = 0; j < segmentLength; j += 1.0f)
         {
             currentPos += rayDir;
 
             Vector2i gridPos(static_cast<int>(currentPos.x / CELL_SIZE), static_cast<int>(currentPos.y / CELL_SIZE));
 
             if (gridPos.x < 0 || gridPos.y < 0 || gridPos.x >= GRID_WIDTH || gridPos.y >= GRID_HEIGHT)
-                break; 
-   
+                break;
+
             Vector2f playerWorldPos = Vector2f(playerPos.x * CELL_SIZE, playerPos.y * CELL_SIZE);
             FloatRect playerBounds(playerWorldPos.x, playerWorldPos.y, CELL_SIZE, CELL_SIZE);
 
             if (doesSegmentIntersectRectangle(segments[i][0].position, segments[i][1].position, playerBounds, intersection)) {
                 segments[i][1].position = intersection;
                 hitPlayer = true;
-         
+
             }
- 
-            if (!grid.getCell(gridPos.x, gridPos.y).walkable) 
+
+            if (!grid.getCell(gridPos.x, gridPos.y).walkable)
             {
                 FloatRect cellBounds(gridPos.x * CELL_SIZE, gridPos.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
 
@@ -129,7 +127,7 @@ void Enemy::updateCastRay(Grid& grid, const Vector2i& playerPos)
                     segments[i][1].position = intersection;
                     hitWall = true;
                 }
-                break; 
+                break;
             }
         }
 
@@ -137,16 +135,16 @@ void Enemy::updateCastRay(Grid& grid, const Vector2i& playerPos)
             playerInSight = true;
             clock.restart();
         }
-        
+
         segments[i][0].color = Color::Yellow;
         segments[i][1].color = Color::Yellow;
-        
+
     }
 }
 
 void Enemy::draw(RenderWindow& window)
 {
-    
+
     window.draw(shape);
 
     Vector2f circleCenter(400, 300);
@@ -159,11 +157,11 @@ void Enemy::drawFov(RenderWindow& window, Grid& grid)
 {
     ConvexShape fovShape;
     fovShape.setPointCount(3);
-    fovShape.setFillColor(Color(255, 255, 0, 100)); 
+    fovShape.setFillColor(Color(255, 255, 0, 100));
 
-    Vector2f enemyPos = shape.getPosition() + Vector2f(CELL_SIZE / 2, CELL_SIZE / 2); 
+    Vector2f enemyPos = shape.getPosition() + Vector2f(CELL_SIZE / 2, CELL_SIZE / 2);
 
-    Vector2f direction = getDirection(); 
+    Vector2f direction = getDirection();
 
     float leftAngle = atan2(direction.y, direction.x) - (fovAngle * 0.5f * 3.14159f / 180.0f);
     float rightAngle = atan2(direction.y, direction.x) + (fovAngle * 0.5f * 3.14159f / 180.0f);
@@ -180,13 +178,13 @@ void Enemy::drawFov(RenderWindow& window, Grid& grid)
 
 void Enemy::drawCastRay(RenderWindow& window, Grid& grid, const Vector2i& playerPos)
 {
-    
+
     Vector2f direction = getDirection();
 
     angleRange = 30.f * 3.14159f / 180.0f;
     segmentLength = 150.f;
 
-  
+
     updateCastRay(grid, playerPos);
     for (auto& segment : segments) {
         window.draw(segment);
@@ -219,7 +217,7 @@ void Enemy::moveAlongPath(float deltaTime, Grid& grid, const Vector2i& playerPos
         if (distance > 0.1f) {
             direction /= distance;
             shape.setPosition(shape.getPosition() + direction * SPEED * deltaTime);
-        } 
+        }
         if (distance < SPEED * deltaTime) {
             shape.setPosition(nextPosition);
             currentIndexPath++;
@@ -315,39 +313,39 @@ void Enemy::initPatrol(Grid& grid)
 
 void Enemy::chase(Grid& grid, const Vector2i& playerPos, float deltaTime)
 {
- 
+
     int dx = abs(playerPos.x - lastKnownPlayerPos.x);
     int dy = abs(playerPos.y - lastKnownPlayerPos.y);
 
-    if (dx > 1 || dy > 1) {  
+    if (dx > 1 || dy > 1) {
         lastKnownPlayerPos = playerPos;
-        setPath(Pathfinding::findPath(grid, getGridPosition(), playerPos));  
+        setPath(Pathfinding::findPath(grid, getGridPosition(), playerPos));
     }
-    
+
     moveAlongPath(deltaTime, grid, playerPos);
 
 }
 
 void Enemy::patrol(float deltaTime, Grid& grid, const Vector2i& playerPos)
 {
-   // static vector<Vector2i> patrolPoints = { {2,2}, {8,2}, {8,8}, {12,13} };
+    // static vector<Vector2i> patrolPoints = { {2,2}, {8,2}, {8,8}, {12,13} };
 
     if (patrolPoints.empty()) {
         initPatrol(grid);
         return;
     }
     if (path.empty()) {
-        setPath(Pathfinding::findPath(grid, getGridPosition(), targetPosition));  
-        
+        setPath(Pathfinding::findPath(grid, getGridPosition(), targetPosition));
+
     }
 
     moveAlongPath(deltaTime, grid, playerPos);
-    
+
     Vector2i enemyPos = getGridPosition();
     if (enemyPos == targetPosition) {
         currentIndexPath = (currentIndexPath + 1) % patrolPoints.size();
         targetPosition = patrolPoints[currentIndexPath];
-        setPath(Pathfinding::findPath(grid, getGridPosition(), targetPosition));  
+        setPath(Pathfinding::findPath(grid, getGridPosition(), targetPosition));
     }
 }
 
@@ -381,7 +379,7 @@ void Enemy::search(float deltaTime, Grid& grid, const Vector2i& playerPos)
             else {
                 searchTargets.clear();
                 return;
-  
+
             }
         }
     }
@@ -427,10 +425,4 @@ Vector2f Enemy::castRay(Grid& grid, Vector2f start, float angle)
     }
 
     return end;
-}
-void Enemy::test() {
-
-}
-void Enemy::protect() {
-
 }
