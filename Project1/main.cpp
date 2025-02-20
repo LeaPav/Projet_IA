@@ -21,13 +21,13 @@ int main() {
     grid.loadFromFile("map.txt");
     vector<unique_ptr<Enemy>> enemies;
 
-    auto enemy1 = std::make_unique<Enemy>(100, 100);
-    auto enemy2 = std::make_unique<Enemy>(700, 100);
+    auto enemy1 = make_unique<Enemy>(100, 100);
+    auto enemy2 = make_unique<Enemy>(700, 100);
     Objet objet(496,39.5);
     objet.shape.setFillColor(Color::Red);
-    enemies.push_back(std::move(enemy1));
-    enemies.push_back(std::move(enemy2));
-    sf::Clock clock;
+    enemies.push_back(move(enemy1));
+    enemies.push_back(move(enemy2));
+    Clock clock;
 
     while (window.isOpen()) {
         Time dt = clock.restart();

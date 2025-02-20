@@ -1,9 +1,6 @@
 #include "Enemy.hpp"
 #include <cmath>
 
-using namespace sf;
-using namespace std;
-
 Enemy::Enemy(float x, float y) : Entity(x, y, Color::Red), currentState(PATROL), circleCenter(400, 400) {
 
     segments.resize(numSegments, VertexArray(Lines, 2));

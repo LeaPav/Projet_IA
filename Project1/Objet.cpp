@@ -1,6 +1,6 @@
 #include "Objet.hpp"
-Objet::Objet(float x, float y) : Entity(x, y, sf::Color::Red) {}
-void Objet::update(float deltaTime, Grid& grid, sf::Vector2i& playerPos) {
+Objet::Objet(float x, float y) : Entity(x, y, Color::Red) {}
+void Objet::update(float deltaTime, Grid& grid, Vector2i& playerPos) {
 	
 }
 void Objet::coliP(Player& player, RectangleShape& forme, RenderWindow& window) {

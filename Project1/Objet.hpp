@@ -12,6 +12,6 @@ public:
 	
 	Objet(float x, float y);
 	bool recupObj = false;
-	void update(float deltaTime, Grid& grid, sf::Vector2i& playerPos) override;
+	void update(float deltaTime, Grid& grid, Vector2i& playerPos) override;
 	void coliP(Player& player, RectangleShape& forme, RenderWindow& window);
 };
