@@ -336,7 +336,15 @@ void Enemy::search(float deltaTime, Grid& grid, const Vector2i& playerPos)
     moveAlongPath(deltaTime, grid, playerPos);
 }
 
-void Enemy::protect() {}
+void Enemy::protect(float deltaTime, Grid& grid, const Vector2i& objetPos) {
+
+    if (path.empty()) {
+        setPath(Pathfinding::findPath(grid, getGridPosition(), objetPos));
+    }
+
+
+    moveAlongPath(deltaTime, grid, objetPos);
+}
 Vector2f Enemy::getDirection()
 {
     if (path.empty() || currentIndexPath >= path.size())
