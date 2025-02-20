@@ -1,9 +1,14 @@
 #include"SelctorNode.hpp"
-bool SelectorNode::Execute(){
-    if (condition.Execute()) {
-        return actionA.Execute();
+
+void SelectorNode::AddChild(std::unique_ptr<BTNode> child) {
+    children.push_back(std::move(child));
+}
+NodeState SelectorNode::execute(){
+    cout << "root ok";
+    for (auto& child : children) {
+        if (child->execute() == NodeState::SUCCESS) {
+            return NodeState::SUCCESS;
+        }
     }
-    else {
-        return actionB.Execute();
-    }
+    return NodeState::FAILURE;
 }

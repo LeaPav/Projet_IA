@@ -1,12 +1,22 @@
 #pragma once
 #include "NodeState.hpp"
-class FunctionA : public NodeS {
+
+class ActionNode1 : public BTNode {
+private:
+    std::string actionName;
+    Enemy& enem1;
 public:
-    bool Execute() override;
+    ActionNode1(std::string name, Enemy& enemy);
+    NodeState execute() override;
 };
 
-// Action B
-class FunctionB : public NodeS {
+
+
+class ActionNode2 : public BTNode {
+private:
+    std::string actionName;
+    Enemy& enem2;
 public:
-    bool Execute() override;
+    ActionNode2(std::string name, Enemy& enemy);
+    NodeState execute() override;
 };

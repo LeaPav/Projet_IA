@@ -74,6 +74,10 @@
     <IncludePath>C:\SFML-2.6.2\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\SFML-2.6.2\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>C:\SFML-2.6.2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\SFML-2.6.2\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -135,9 +139,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ActionNode.cpp" />
+    <ClCompile Include="Blackboard.cpp" />
     <ClCompile Include="ConditionNode.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="Fsm.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Node.cpp" />
@@ -147,13 +153,16 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SelctorNode.cpp" />
     <ClCompile Include="SequenceNode.cpp" />
+    <ClCompile Include="test.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActionNode.hpp" />
+    <ClInclude Include="Blackboard.hpp" />
     <ClInclude Include="ConditionNode.hpp" />
     <ClInclude Include="Enemy.hpp" />
     <ClInclude Include="Entity.hpp" />
+    <ClInclude Include="Fsm.hpp" />
     <ClInclude Include="Grid.hpp" />
     <ClInclude Include="Node.hpp" />
     <ClInclude Include="NodeState.hpp" />
