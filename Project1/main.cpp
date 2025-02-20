@@ -30,7 +30,7 @@ int main() {
     auto enemy4 = make_unique<Enemy>(500, 500);
 
     Objet objet(496,39.5);
-    objet.shape.setFillColor(Color::Red);
+    objet.shape.setFillColor(Color::Yellow);
 
     enemies.push_back(move(enemy1));
     enemies.push_back(move(enemy2));
