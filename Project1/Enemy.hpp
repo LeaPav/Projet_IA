@@ -19,7 +19,6 @@ public:
     void update(float deltaTime, Grid& grid, Vector2i& playerPos) override;
     void updateCastRay(Grid& grid,const Vector2i& playerPos);
     void draw(RenderWindow& window);
-    void drawFov(RenderWindow& window, Grid& grid);
     void drawCastRay(RenderWindow& window, Grid& grid, const Vector2i& playerPos);
     void moveAlongPath(float deltaTime, Grid& grid, const Vector2i& playerPos);
 
