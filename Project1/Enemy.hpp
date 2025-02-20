@@ -34,6 +34,8 @@ private:
     void patrol(float deltaTime, Grid& grid);
     std::vector<sf::Vector2i> searchPoints(sf::Vector2i lastKnownPos);
     void search(float deltaTime, Grid& grid);
+    void test();
+    void protect();
 };
 
 #endif // ENEMY_HPP

@@ -134,7 +134,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ActionNode.cpp" />
-    <ClCompile Include="Blackboard.cpp" />
     <ClCompile Include="ConditionNode.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
@@ -142,24 +141,23 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="NodeState.cpp" />
+    <ClCompile Include="Objet.cpp" />
     <ClCompile Include="Pathfinding.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SelctorNode.cpp" />
-    <ClCompile Include="SequenceNode.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActionNode.hpp" />
-    <ClInclude Include="Blackboard.hpp" />
     <ClInclude Include="ConditionNode.hpp" />
     <ClInclude Include="Enemy.hpp" />
     <ClInclude Include="Entity.hpp" />
     <ClInclude Include="Grid.hpp" />
     <ClInclude Include="Node.hpp" />
     <ClInclude Include="NodeState.hpp" />
+    <ClInclude Include="Objet.hpp" />
     <ClInclude Include="Pathfinding.hpp" />
     <ClInclude Include="Player.hpp" />
     <ClInclude Include="SelctorNode.hpp" />
-    <ClInclude Include="SequenceNode.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

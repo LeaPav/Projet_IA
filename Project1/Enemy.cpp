@@ -1,7 +1,7 @@
 #include "Enemy.hpp"
 #include <cmath>
 
-enum Enemy::State { PATROL, CHASE, SEARCH, PROTECT };
+enum Enemy::State { PATROL, CHASE, SEARCH, PROTECT, TEST };
 Enemy::Enemy(float x, float y) : Entity(x, y, sf::Color::Red), currentState(PATROL) {}
 
 void Enemy::setPath(std::vector<sf::Vector2i> newPath)
@@ -58,13 +58,17 @@ void Enemy::update(float deltaTime, Grid& grid, sf::Vector2i& playerPos) {
          //    currentState = SEARCH;
          //}
         break;
-
+    case TEST:
+        test();
+        break;
     case SEARCH:
         shape.setFillColor(sf::Color::Green);
         search(deltaTime, grid);
         break;
 
     case PROTECT:
+        protect();
+        shape.setFillColor(sf::Color::Blue);
         break;
 
     default:
@@ -164,4 +168,10 @@ void Enemy::search(float deltaTime, Grid& grid)
     }
 
     moveAlongPath(deltaTime, grid);
+}
+void Enemy::test() {
+
+}
+void Enemy::protect() {
+
 }

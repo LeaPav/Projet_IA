@@ -1,12 +1,14 @@
+#pragma once
 #include <iostream>
 #include <vector>
 #include <memory>
 using namespace std;
 
-enum class NodeState { SUCCESS, FAILURE, RUNNING };
 
-class BTNode {
+
+class NodeS {
 public:
-    virtual ~BTNode() = default;
-    virtual NodeState execute() = 0;
+
+    virtual ~NodeS() {}
+    virtual bool Execute() = 0;
 };

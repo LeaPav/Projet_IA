@@ -1,9 +1,12 @@
-#include "NodeState.hpp"
-
-class SelectorNode : public BTNode {
+#pragma once
+#include "ActionNode.hpp"
+#include "ConditionNode.hpp"
+class SelectorNode : public NodeS {
 private:
-    std::vector<std::unique_ptr<BTNode>> children;
+    FunctionA actionA;
+    FunctionB actionB;
+    ConditionNode condition;
+
 public:
-    void AddChild(std::unique_ptr<BTNode> child);
-    NodeState execute() override;
+    bool Execute() override;
 };

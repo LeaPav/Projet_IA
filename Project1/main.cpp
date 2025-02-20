@@ -4,6 +4,7 @@
 #include "Grid.hpp"
 #include "Pathfinding.hpp"
 #include <vector>
+#include "Objet.hpp"
 
 
 const int WINDOW_WIDTH = 835;
@@ -20,7 +21,8 @@ int main() {
 
     auto enemy1 = std::make_unique<Enemy>(100, 100);
     auto enemy2 = std::make_unique<Enemy>(700, 100);
-
+    Objet objet(496,39.5);
+    objet.shape.setFillColor(Color::Red);
     enemies.push_back(std::move(enemy1));
     enemies.push_back(std::move(enemy2));
     sf::Clock clock;
@@ -38,13 +40,14 @@ int main() {
         
         sf::Vector2i playerGridPos = player.getGridPosition();
         player.update(deltaTime, grid, playerGridPos);
-   
+        
         for (auto& enemy : enemies) {
             enemy->update(deltaTime, grid, playerGridPos);
         }
-
+ 
         window.clear();
         grid.draw(window);
+        objet.coliP(player, objet.shape, window);
         window.draw(player.shape);
         for (const auto& enemy : enemies)
             window.draw(enemy->shape);

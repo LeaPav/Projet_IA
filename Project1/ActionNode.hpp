@@ -1,9 +1,12 @@
+#pragma once
 #include "NodeState.hpp"
-
-class ActionNode : public BTNode {
-private:
-    std::string actionName;
+class FunctionA : public NodeS {
 public:
-    ActionNode(std::string name) : actionName(name) {}
-    NodeState execute() override;
+    bool Execute() override;
+};
+
+// Action B
+class FunctionB : public NodeS {
+public:
+    bool Execute() override;
 };

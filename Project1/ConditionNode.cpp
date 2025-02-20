@@ -1,4 +1,7 @@
 #include"ConditionNode.hpp"
-NodeState ConditionNode::execute(){
-    return (blackboard.GetValue(key) == expectedValue) ? NodeState::SUCCESS : NodeState::FAILURE;
+bool ConditionNode::Execute() {
+    if (int caca = 5) {
+        cout << "test nul";
+    }
+    return true;
 }
