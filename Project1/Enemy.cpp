@@ -44,6 +44,7 @@ void Enemy::detectPlayer(Grid& grid, const Vector2i& playerPos)
 }
 
 void Enemy::update(float deltaTime, Grid& grid, sf::Vector2i& playerPos) {
+
 }
 
 void Enemy::updateCastRay(Grid& grid, const Vector2i& playerPos)
@@ -335,29 +336,7 @@ void Enemy::search(float deltaTime, Grid& grid, const Vector2i& playerPos)
     moveAlongPath(deltaTime, grid, playerPos);
 }
 
-
-
-
-
-void Enemy::protect(float deltaTime, Grid& grid, const Vector2i& objetPos) {
-
-    if (path.empty()) {
-        setPath(Pathfinding::findPath(grid, getGridPosition(), objetPos));
-        
-    }
-    moveAlongPath(deltaTime, grid, objetPos);
-
-
-    //if (currentState == PROTECT) {
-
-    //    setPath(Pathfinding::findPath(grid, getGridPosition(), ));
-
-
-    //}
-}
-
-
-
+void Enemy::protect() {}
 Vector2f Enemy::getDirection()
 {
     if (path.empty() || currentIndexPath >= path.size())
