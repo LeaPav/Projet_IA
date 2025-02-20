@@ -17,5 +17,7 @@ NodeState ConditionNode::execute(){
     float distEnemy = std::hypot(posEnemy.x - objCordx,
         posEnemy.y - objCordy);
 
-    return (distPlayer < distEnemy) ? NodeState::SUCCESS : NodeState::FAILURE;
+    std::cout << "ok condition : " << distPlayer << "  " << distEnemy << endl;
+    return (distPlayer > distEnemy) ? NodeState::SUCCESS : NodeState::FAILURE;
+
 }

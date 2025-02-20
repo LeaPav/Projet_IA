@@ -4,9 +4,9 @@
 class ActionNode1 : public BTNode {
 private:
     std::string actionName;
-    Enemy* enem1;
+    Enemy& enem1;
 public:
-    ActionNode1(std::string name, Enemy* enemy);
+    ActionNode1(std::string name, Enemy& enemy);
     NodeState execute() override;
 };
 
@@ -15,8 +15,8 @@ public:
 class ActionNode2 : public BTNode {
 private:
     std::string actionName;
-    Enemy* enem2;
+    Enemy& enem2;
 public:
-    ActionNode2(std::string name, Enemy* enemy);
+    ActionNode2(std::string name, Enemy& enemy);
     NodeState execute() override;
 };

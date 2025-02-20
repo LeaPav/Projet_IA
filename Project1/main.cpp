@@ -5,7 +5,7 @@
 #include <vector>
 #include "Objet.hpp"
 #include "Enemy.hpp"
-
+#include "Fsm.hpp"
 
 const int WINDOW_WIDTH = 835;
 const int WINDOW_HEIGHT = 565;
@@ -20,10 +20,15 @@ int main() {
     std::vector<std::unique_ptr<Enemy>> enemies;
     auto enemy1 = std::make_unique<Enemy>(100, 100);
     auto enemy2 = std::make_unique<Enemy>(700, 100);
+    /*for (auto& enemyBT : enemies) {
+        FSM fsm(*enemyBT);
+        
+    }*/
     Objet testobj(496, 39.5);
     testobj.shape.setFillColor(sf::Color::Red);
     enemies.push_back(std::move(enemy1));
     enemies.push_back(std::move(enemy2));
+    
     sf::Clock clock;
     while (window.isOpen()) {
         sf::Time dt = clock.restart();
@@ -39,6 +44,9 @@ int main() {
         sf::Vector2i playerGridPos = player.getGridPosition();
         player.update(deltaTime, grid, playerGridPos);
         for (auto& enemy : enemies) {
+            FSM fsm(*enemy);
+            fsm.InitBehevior(*enemy, player);
+            fsm.run(deltaTime, grid, playerGridPos, *enemy);
             enemy->update(deltaTime, grid, playerGridPos);
         }
  

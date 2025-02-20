@@ -17,6 +17,7 @@ void Enemy::setPath(std::vector<sf::Vector2i> newPath)
 void Enemy::setTarget(const sf::Vector2i& target)
 {
     targetPosition = target;
+   
 }
 
 void Enemy::detectPlayer(Grid& grid, const sf::Vector2i& playerPos)
@@ -38,7 +39,6 @@ void Enemy::detectPlayer(Grid& grid, const sf::Vector2i& playerPos)
 }
 
 void Enemy::update(float deltaTime, Grid& grid, sf::Vector2i& playerPos) {
-    std::cout << "vide";
 //    detectPlayer(grid, playerPos);
 //
 //    switch (currentState) {
@@ -149,7 +149,7 @@ std::vector<sf::Vector2i> Enemy::searchPoints(sf::Vector2i lastKnownPos)
 void Enemy::search(float deltaTime, Grid& grid)
 {
     if (searchTargets.empty()) {
-        currentState = PATROL;
+        currentState = BEHEVIOR;
         currentIndexPath = 0;
         path.clear();
         return;

@@ -10,10 +10,10 @@ using namespace std;
 using namespace sf;
 class FSM {
 public:
-    FSM();
-    void run(float deltaTime, Grid& grid, sf::Vector2i& playerPos,Enemy* enemy);
-    void Behevior();
-    void InitBehevior(Enemy& enemy,Player& player);
+    FSM(Enemy& enemY);
+    Enemy& _enemy;
+    void run(float deltaTime, Grid& grid, sf::Vector2i& playerPos,Enemy& enemy);
+    void InitBehevior(Enemy& enemy1,Player& player);
 private:
     Blackboard blackboard;
     unique_ptr<SelectorNode> root ;
