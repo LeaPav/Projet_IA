@@ -1,4 +1,4 @@
-#include <SFML/Graphics.hpp>
+#include "stdafx.hpp"
 #include "Player.hpp"
 #include "Grid.hpp"
 #include "Pathfinding.hpp"
@@ -7,47 +7,52 @@
 #include "Enemy.hpp"
 #include "Fsm.hpp"
 
-const int WINDOW_WIDTH = 835;
-const int WINDOW_HEIGHT = 565;
+const int WINDOW_WIDTH = 1785;
+const int WINDOW_HEIGHT = 910;
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Jeu SFML - IA Ennemis");
+    srand(static_cast<unsigned>(time(nullptr)));
+
+    RenderWindow window(VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Jeu SFML - IA Ennemis");
     window.setFramerateLimit(60);
 
     Player player(200, 400);
     Grid grid;
     grid.loadFromFile("map.txt");
-    std::vector<std::unique_ptr<Enemy>> enemies;
-    auto enemy1 = std::make_unique<Enemy>(100, 100);
-    auto enemy2 = std::make_unique<Enemy>(700, 100);
-    /*for (auto& enemyBT : enemies) {
-        FSM fsm(*enemyBT);
-        
-    }*/
-    Objet testobj(496, 39.5);
-    testobj.shape.setFillColor(sf::Color::Red);
-    enemies.push_back(std::move(enemy1));
-    enemies.push_back(std::move(enemy2));
     
-    sf::Clock clock;
+    
+    vector<unique_ptr<Enemy>> enemies;
+
+    auto enemy1 = make_unique<Enemy>(100, 100);
+    auto enemy2 = make_unique<Enemy>(700, 100);
+    Objet objet(496,39.5);
+    objet.shape.setFillColor(Color::Red);
+    enemies.push_back(move(enemy1));
+    enemies.push_back(move(enemy2));
+    Clock clock;
+
     while (window.isOpen()) {
-        sf::Time dt = clock.restart();
+        Time dt = clock.restart();
         float deltaTime = dt.asSeconds();
 
-        sf::Event event;
+        Event event;
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
+            if (event.type == Event::Closed)
                 window.close();
+            if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape) {
+                window.close();
+            }
         }
 
         
-        sf::Vector2i playerGridPos = player.getGridPosition();
+        Vector2i playerGridPos = player.getGridPosition();
         player.update(deltaTime, grid, playerGridPos);
         for (auto& enemy : enemies) {
             FSM fsm(*enemy);
             fsm.InitBehevior(*enemy, player);
             fsm.run(deltaTime, grid, playerGridPos, *enemy);
             enemy->update(deltaTime, grid, playerGridPos);
+            
         }
  
         window.clear();
@@ -55,8 +60,12 @@ int main() {
         
         testobj.coliP(player, testobj.shape, window);
         window.draw(player.shape);
-        for (const auto& enemy : enemies)
-            window.draw(enemy->shape);
+        for (const auto& enemy : enemies) {
+            enemy->draw(window);
+           // enemy->drawFov(window, grid);
+            enemy->drawCastRay(window, grid, playerGridPos);
+        }
+
         window.display();
     }
     return 0;

@@ -1,3 +1,4 @@
+
 #include "ActionNode.hpp"
 
     ActionNode1::ActionNode1(std::string name, Enemy& enemy) : actionName(name),enem1(enemy) {}
@@ -12,3 +13,4 @@
         enem2.setCurrentState(enem2.PROTECT);
         return NodeState::SUCCESS;
     }
+
