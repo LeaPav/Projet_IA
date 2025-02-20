@@ -1,11 +1,16 @@
+#ifndef NODE_HPP
+#define NODE_HPP
 
 #include "stdafx.hpp"
-
-struct Node {
+class Node {
+public:
     Vector2i position;
     int gCost, hCost, fCost;
     Node* parent;
 
     Node(Vector2i pos);
-    void calculateCosts(Node* end, int newG);
+    void calculateCosts(Vector2i endPos, int newG);
+    int calculateHeuristic(Vector2i endPos);
 };
+
+#endif

@@ -11,7 +11,8 @@ const int WINDOW_WIDTH = 1785;
 const int WINDOW_HEIGHT = 910;
 
 int main() {
-    srand(static_cast<unsigned>(time(nullptr)));
+ 
+    srand(unsigned(time(nullptr)));
 
     RenderWindow window(VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Jeu SFML - IA Ennemis");
     window.setFramerateLimit(60);
@@ -24,7 +25,7 @@ int main() {
     vector<unique_ptr<Enemy>> enemies;
 
     auto enemy1 = make_unique<Enemy>(100, 100);
-    auto enemy2 = make_unique<Enemy>(700, 100);
+    auto enemy2 = make_unique<Enemy>(1600, 500);
     Objet objet(496,39.5);
     objet.shape.setFillColor(Color::Red);
     enemies.push_back(move(enemy1));
@@ -62,7 +63,6 @@ int main() {
         window.draw(player.shape);
         for (const auto& enemy : enemies) {
             enemy->draw(window);
-           // enemy->drawFov(window, grid);
             enemy->drawCastRay(window, grid, playerGridPos);
         }
 

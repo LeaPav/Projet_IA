@@ -125,29 +125,6 @@ void Enemy::draw(RenderWindow& window)
 
 }
 
-void Enemy::drawFov(RenderWindow& window, Grid& grid)
-{
-    ConvexShape fovShape;
-    fovShape.setPointCount(3);
-    fovShape.setFillColor(Color(255, 255, 0, 100));
-
-    Vector2f enemyPos = shape.getPosition() + Vector2f(CELL_SIZE / 2, CELL_SIZE / 2);
-
-    Vector2f direction = getDirection();
-
-    float leftAngle = atan2(direction.y, direction.x) - (fovAngle * 0.5f * 3.14159f / 180.0f);
-    float rightAngle = atan2(direction.y, direction.x) + (fovAngle * 0.5f * 3.14159f / 180.0f);
-
-    Vector2f leftPoint = castRay(grid, enemyPos, leftAngle);
-    Vector2f rightPoint = castRay(grid, enemyPos, rightAngle);
-
-    fovShape.setPoint(0, enemyPos);
-    fovShape.setPoint(1, leftPoint);
-    fovShape.setPoint(2, rightPoint);
-
-    window.draw(fovShape);
-}
-
 void Enemy::drawCastRay(RenderWindow& window, Grid& grid, const Vector2i& playerPos)
 {
 
@@ -271,6 +248,7 @@ void Enemy::initPatrol(Grid& grid)
         int x = rand() % maxX;
         int y = rand() % maxY;
         if (grid.getCell(x, y).walkable) {
+            cout << x << " " << y << endl;
             patrolPoints.push_back(Vector2i(x, y));
         }
         attempts++;
@@ -300,7 +278,6 @@ void Enemy::chase(Grid& grid, const Vector2i& playerPos, float deltaTime)
 
 void Enemy::patrol(float deltaTime, Grid& grid, const Vector2i& playerPos)
 {
-    // static vector<Vector2i> patrolPoints = { {2,2}, {8,2}, {8,8}, {12,13} };
 
     if (patrolPoints.empty()) {
         initPatrol(grid);
@@ -308,7 +285,6 @@ void Enemy::patrol(float deltaTime, Grid& grid, const Vector2i& playerPos)
     }
     if (path.empty()) {
         setPath(Pathfinding::findPath(grid, getGridPosition(), targetPosition));
-
     }
 
     moveAlongPath(deltaTime, grid, playerPos);
