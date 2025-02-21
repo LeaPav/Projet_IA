@@ -18,14 +18,15 @@ void FSM::InitBehevior(Enemy& enemy1, Player& player) {
     sequencePatrol->AddChild(std::make_unique<ActionNode2>("Patrouiller", enemy1));
     //problème dans les arguments de ActionNode , on a besoin d'un pointeur d'enemy
 
+
     root->AddChild(std::move(sequenceProtect));
     root->AddChild(std::move(sequencePatrol));
     
 }
-void FSM::run(float deltaTime, Grid& grid, sf::Vector2i& playerPos,Enemy& enemy,Vector2i& objetPos) {
+void FSM::run(float deltaTime, Grid& grid, sf::Vector2i& playerPos,Enemy& enemy,Vector2i& objetPos,Objet& objet) {
     enemy.updateCastRay(grid,playerPos);
     enemy.detectPlayer(grid, playerPos);
-
+    enemy.revenge(objet, enemy, grid, playerPos, deltaTime);
     switch (enemy.getCurrentState()) {
     case Enemy::PATROL:
         enemy.getShape().setFillColor(sf::Color::Red);
@@ -54,7 +55,7 @@ void FSM::run(float deltaTime, Grid& grid, sf::Vector2i& playerPos,Enemy& enemy,
 
     case Enemy::PROTECT:
         enemy.getShape().setFillColor(sf::Color::Blue);
-        enemy.protect(deltaTime, grid, objetPos);
+        enemy.protect(deltaTime, grid, objetPos/*, objet,enemy, playerPos*/);
         break;
 
     default:

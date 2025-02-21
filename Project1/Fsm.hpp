@@ -12,7 +12,7 @@ class FSM {
 public:
     FSM(Enemy& enemY);
     Enemy& _enemy;
-    void run(float deltaTime, Grid& grid, sf::Vector2i& playerPos,Enemy& enemy, Vector2i& objetPos);
+    void run(float deltaTime, Grid& grid, sf::Vector2i& playerPos,Enemy& enemy, Vector2i& objetPos, Objet& objet);
     void InitBehevior(Enemy& enemy1,Player& player);
 
 private:

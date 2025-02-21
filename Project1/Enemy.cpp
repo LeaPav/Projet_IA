@@ -300,6 +300,27 @@ void Enemy::patrol(float deltaTime, Grid& grid, const Vector2i& playerPos)
         setPath(Pathfinding::findPath(grid, getGridPosition(), targetPosition));
     }
 }
+void Enemy::revenge(Objet& objet, Enemy& enemy, Grid& grid, const Vector2i& playerPos, float deltaTime) {
+    if (objet.getRecupO() == true) {
+        chaseTimer += deltaTime;
+        bool fin = true;
+        float speed = 200;
+        if (chaseTimer<= 15)
+        {
+            enemy.SetSpeed(speed);
+           setCurrentState(CHASE);
+           
+        }
+        else if (chaseTimer > 15)
+        {
+            speed = 100;
+            enemy.SetSpeed(speed);
+            objet.setRecupO(fin);
+        }
+ 
+    }
+}
+
 
 vector<Vector2i> Enemy::searchPoints(Vector2i lastKnownPos)
 {
@@ -339,7 +360,7 @@ void Enemy::search(float deltaTime, Grid& grid, const Vector2i& playerPos)
     moveAlongPath(deltaTime, grid, playerPos);
 }
 
-void Enemy::protect(float deltaTime, Grid& grid, const Vector2i& objetPos) {
+void Enemy::protect(float deltaTime, Grid& grid, const Vector2i& objetPos ) {
 
     if (path.empty()) {
         setPath(Pathfinding::findPath(grid, getGridPosition(), objetPos));

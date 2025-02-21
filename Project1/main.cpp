@@ -57,7 +57,7 @@ int main() {
         for (auto& enemy : enemies) {
             FSM fsm(*enemy);
             fsm.InitBehevior(*enemy, player);
-            fsm.run(deltaTime, grid, playerGridPos, *enemy, objetGridPos);
+            fsm.run(deltaTime, grid, playerGridPos, *enemy, objetGridPos,objet);
             enemy->update(deltaTime, grid, playerGridPos);
             
         }

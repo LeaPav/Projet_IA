@@ -18,5 +18,6 @@ public:
 	bool recupObj = false;
 	void update(float deltaTime, Grid& grid, Vector2i& playerPos) override;
 	void coliP(Player& player, RectangleShape& forme, RenderWindow& window);
-
+	bool getRecupO() const { return recupObj; }
+	bool setRecupO(bool recup) { return recupObj = recup; }
 };

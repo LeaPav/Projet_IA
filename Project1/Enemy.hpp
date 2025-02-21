@@ -3,6 +3,7 @@
 #include "Entity.hpp"
 #include "Player.hpp"
 #include "Pathfinding.hpp"
+#include "Objet.hpp"
 
 #include "stdafx.hpp"
 
@@ -13,7 +14,7 @@ protected:
 public:
     enum State { PATROL, CHASE, SEARCH, PROTECT, BEHEVIOR
     };
-    static constexpr float SPEED = 100.0f;
+    float SPEED = 100.0f;
     Enemy(float x, float y);
 
     void setPath(vector<Vector2i> newPath);
@@ -31,11 +32,12 @@ public:
     vector<Vector2i> searchPoints(Vector2i lastKnownPos);
     void search(float deltaTime, Grid& grid, const Vector2i& playerPos);
     void protect(float deltaTime, Grid& grid, const Vector2i& objetPos);
-
+    void revenge(Objet& objet, Enemy& enemy, Grid& grid, const Vector2i& playerPos, float deltaTime);
 
     RectangleShape& getShape() { return shape; }
     State getCurrentState() const { return currentState; }
     State setCurrentState(State Nstate) { return currentState = Nstate; }
+    float SetSpeed(float speed) { return SPEED = speed; }
     Clock getClock()const { return clock; }
     Time setTime(Time Ntime) { return time = Ntime; }
     Time getTime()const { return time; }
@@ -63,6 +65,7 @@ private:
     float fovDistance = 6.0f;
     float rotationAngle = 0.0f;
     float protectTimer = 0.0f;
+    float chaseTimer = 0.0f;
     void initPatrol(Grid& grid);
 
 
